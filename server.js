@@ -508,6 +508,31 @@ async function handleNews(req, res) {
 }
 
 // ===================================================================
+// API: 板块轮动热力
+// ===================================================================
+async function handleSectorHeat(req, res) {
+  const cached = getCache('sectorHeat', 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const results = [];
+    for (const sector of SECTORS) {
+      const topCodes = sector.stocks.slice(0, 5).map(s => s.code);
+      const quotes = await Promise.allSettled(topCodes.map(c => fetchGBK(`https://hq.sinajs.cn/list=${getPrefix(c)}${c}`, 6000)));
+      let total = 0, count = 0;
+      for (let j = 0; j < quotes.length; j++) {
+        if (quotes[j].status !== 'fulfilled' || !quotes[j].value.ok) continue;
+        const q = parseSinaQuote(topCodes[j], quotes[j].value.text);
+        if (q) { total += q.changePct; count++; }
+      }
+      results.push({ name: sector.name, avgPct: count > 0 ? Math.round(total / count * 100) / 100 : 0, stockCount: sector.stocks.length });
+      if (SECTORS.length > 1) await new Promise(r => setTimeout(r, 30));
+    }
+    setCache('sectorHeat', results);
+    sendJSON(res, 200, { data: results });
+  } catch (e) { sendError(res, 500, '获取板块 热力失败: ' + e.message); }
+}
+
+// ===================================================================
 // 静态文件服务
 // ===================================================================
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon' };
@@ -536,6 +561,7 @@ const server = http.createServer((req, res) => {
   if (p === '/api/sectors' && req.method === 'GET') return handleSectors(req, res);
   if (p === '/api/sector-quotes' && req.method === 'GET') return handleSectorQuotes(req, res);
   if (p === '/api/news' && req.method === 'GET') return handleNews(req, res);
+  if (p === '/api/sector-heat' && req.method === 'GET') return handleSectorHeat(req, res);
   if (p === '/' || p === '') return serveStatic(res, path.join(__dirname, 'stock-analysis.html'));
   serveStatic(res, path.join(__dirname, p));
 });
