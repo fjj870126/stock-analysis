@@ -263,6 +263,10 @@ body, .header, .stock-card, .sector-tab, .index-item, .overview, .advice, .chart
 
 /* ===== 按钮点击缩放 ===== */
 .header-btn:active,.sort-btn:active,.tabs button:active{transform:scale(.92)}
+/* 筛选面板滑动过渡 */
+.filter-bar{overflow:hidden;max-height:0;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);margin-bottom:0}
+.filter-bar.active{max-height:100px;opacity:1;margin-bottom:8px}
+
 </style>
 </head>
 <body style="animation:fadeIn .6s ease both">
@@ -1166,7 +1170,7 @@ function renderStockList(quotes, codes) {
       <span style="flex:1"></span>
       <button class="sort-btn" onclick="toggleFilter()">🎯 筛选</button>
     </div>
-    <div id="filterBar" style="display:none;gap:6px;margin-bottom:8px;flex-wrap:wrap;align-items:center;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg)">
+    <div id="filterBar" class="filter-bar" style="gap:6px;flex-wrap:wrap;align-items:center;padding:8px;border:1px solid var(--bd);border-radius:8px;background:var(--bg)">
       <input id="fMinPct" placeholder="涨幅≥" style="width:70px;padding:4px 8px;border:1px solid var(--bd);border-radius:4px;font-size:11px;background:var(--card);color:var(--text)">%
       <span style="color:var(--t2);font-size:11px">~</span>
       <input id="fMaxPct" placeholder="涨幅≤" style="width:70px;padding:4px 8px;border:1px solid var(--bd);border-radius:4px;font-size:11px;background:var(--card);color:var(--text)">%
@@ -1193,7 +1197,7 @@ function renderStockList(quotes, codes) {
 let filterVisible = false;
 function toggleFilter() {
   filterVisible = !filterVisible;
-  document.getElementById('filterBar').style.display = filterVisible ? 'flex' : 'none';
+  document.getElementById('filterBar').classList.toggle('active', filterVisible);
 }
 function doFilter() {
   filterMinPct = document.getElementById('fMinPct').value;
@@ -1210,7 +1214,7 @@ function resetFilter() {
   document.getElementById('fMinPrice').value = '';
   document.getElementById('fMaxPrice').value = '';
   filterVisible = false;
-  document.getElementById('filterBar').style.display = 'none';
+  document.getElementById('filterBar').classList.remove('active');
   const btn = document.querySelector('.sector-tab.active');
   if (btn) btn.click();
 }
