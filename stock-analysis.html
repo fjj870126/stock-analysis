@@ -503,6 +503,7 @@ const API = {
   sectorQuotes: codes => API.get(`/api/sector-quotes?codes=${codes.join(',')}`),
   indexes: () => API.get('/api/indexes'),
   sectorHeat: () => API.get('/api/sector-heat'),
+  moneyflow: c => API.get('/api/moneyflow?code='+c),
   news: () => API.get('/api/news'),
 };
 
