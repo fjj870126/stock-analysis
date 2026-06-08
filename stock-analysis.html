@@ -202,15 +202,89 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .empty{padding:40px;text-align:center;color:var(--t2);font-size:12px}
 .footer{text-align:center;padding:16px;color:var(--t3);font-size:11px}
 
-@media(max-width:600px){
-  .header{flex-direction:column;align-items:stretch;padding:16px}
-  .header-controls{justify-content:flex-end}
-  .search-box input{width:100%}
-  .reason-group{grid-template-columns:1fr}
-  .stock-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr))}
-  .chart-box{height:300px}
-  .ov-meta{grid-template-columns:repeat(auto-fill,minmax(85px,1fr))}
-  .ind-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr))}
+@media(max-width:768px){
+  .container{padding:10px}
+  .main-layout{flex-direction:column}.left-panel{width:100%}
+  .header{padding:12px 14px;gap:8px}
+  .header h1{font-size:16px}
+  .header-controls{gap:4px;flex-wrap:wrap;justify-content:flex-end}
+  .search-box{width:100%}
+  .search-box input{width:100%;font-size:12px}
+  .index-bar{gap:6px}
+  .index-item{min-width:100px;padding:6px 10px}
+  .index-price{font-size:15px}
+  .stock-grid{grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:6px}
+  .stock-card{padding:8px 10px}
+  .stock-card .s-name{font-size:12px}
+  .stock-card .s-price{font-size:15px}
+  .sector-tab{font-size:10px}
+  .sect-tab{padding:5px 3px;font-size:9px}
+  .ov-price{font-size:24px}
+  .ov-meta{grid-template-columns:repeat(auto-fill,minmax(80px,1fr));gap:5px}
+  .news{padding:14px 16px}
+}
+
+@media(max-width:480px){
+  .container{padding:8px}
+  .header{padding:10px 12px}
+  .header h1{font-size:14px}
+  .header-controls{gap:3px}
+  .header-btn{width:28px;height:28px;font-size:12px}
+  .swatch{width:16px;height:16px}
+  .search-box input{font-size:11px;padding:5px 10px}
+  .search-box button{font-size:11px;padding:5px 10px}
+  .index-item{min-width:80px;padding:4px 8px}
+  .index-name{font-size:8px}
+  .index-price{font-size:13px}
+  .index-pct{font-size:9px}
+  .stock-grid{grid-template-columns:repeat(auto-fill,minmax(90px,1fr));gap:5px}
+  .stock-card{padding:6px 8px;border-radius:8px}
+  .stock-card .s-name{font-size:11px}
+  .stock-card .s-code{font-size:8px}
+  .stock-card .s-price{font-size:13px}
+  .stock-card .s-chg{font-size:10px}
+  .chart-box{height:260px}
+  .ov-name{font-size:18px}
+  .ov-code{font-size:10px}
+  .ov-price{font-size:22px}
+  .ov-chg{font-size:12px}
+  .ov-meta{grid-template-columns:repeat(auto-fill,minmax(70px,1fr));gap:4px}
+  .ov-meta-item{padding:4px 6px}
+  .ov-meta-item .l{font-size:9px}
+  .ov-meta-item .v{font-size:11px}
+  .ind-grid{grid-template-columns:repeat(auto-fill,minmax(75px,1fr));gap:5px}
+  .ind-card{padding:5px 6px;border-radius:6px}
+  .ind-card .ind-name{font-size:9px}
+  .ind-card .ind-val{font-size:12px}
+  .reason-group{grid-template-columns:1fr;gap:6px}
+  .advice-header h3{font-size:12px}
+  .badge{font-size:11px;padding:3px 10px}
+  .tabs button{font-size:10px;padding:4px 8px}
+  .sector-tab{border-radius:6px}
+  .nav-tab{font-size:10px;padding:5px 6px}
+  .sect-tab{font-size:9px;padding:4px 2px}
+  .sector-list{gap:3px}
+  .sector-row{gap:3px}
+  .news{padding:10px 12px;border-radius:10px}
+  .news h3{font-size:12px}
+  .news-item{font-size:11px;padding:5px 0}
+  .guide-panel{padding:10px 12px}
+  .guide-grid{grid-template-columns:1fr;gap:8px}
+  .guide-card{padding:10px 12px}
+  .guide-card h4{font-size:12px}
+  .guide-card li{font-size:11px}
+  .welcome{min-height:200px}
+  .welcome div[style*="font-size:56px"]{font-size:40px!important}
+  .welcome div[style*="font-size:20px"]{font-size:17px!important}
+  .sort-btn{font-size:10px;padding:2px 7px}
+  .chart-section{padding:12px 14px}
+  .advice{padding:12px 14px}
+  .overview{padding:12px 14px}
+  .indicators{padding:12px 14px}
+  .moneyflow{padding:12px 14px}
+  .empty{padding:20px;font-size:11px}
+  .footer{font-size:10px;padding:10px}
+  .chart-box{height:240px}
 }
 /* ===== 超富顺 · 全套动画特效 ===== */
 /* 全局过渡 */
