@@ -7,9 +7,11 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
-:root{--bg:linear-gradient(135deg,#0f172a,#1e293b);--card:rgba(30,41,59,.92);--text:#f8fafc;--t2:#cbd5e1;--t3:#94a3b8;--acc:#38bdf8;--acc2:#818cf8;--bd:rgba(56,189,248,.18);--hover:rgba(56,189,248,.1);--red:#f87171;--green:#34d399;--gold:#fbbf24;--orange:#f97316;--input-bg:rgba(56,189,248,.08);--shadow2:0 4px 16px rgba(0,0,0,.5);--bbg:rgba(248,113,113,.2);--bsg:rgba(52,211,153,.2);--bhg:rgba(251,191,36,.2);--bc:#f87171;--sc:#34d399;--hc:#fbbf24;--shadow:0 8px 32px rgba(0,0,0,.5);--glow:0 0 24px rgba(56,189,248,.15);--swatch:#38bdf8}
-[data-theme=aurora]{--bg:linear-gradient(135deg,#fefce8,#fef9c3);--card:rgba(255,255,255,.92);--text:#1c1917;--t2:#57534e;--t3:#a8a29e;--acc:#d97706;--acc2:#ea580c;--bd:rgba(217,119,6,.12);--hover:rgba(217,119,6,.07);--red:#dc2626;--green:#059669;--gold:#d97706;--orange:#ea580c;--input-bg:rgba(217,119,6,.04);--shadow2:0 4px 16px rgba(0,0,0,.06);--bbg:rgba(220,38,38,.12);--bsg:rgba(5,150,105,.12);--bhg:rgba(217,119,6,.12);--bc:#dc2626;--sc:#059669;--hc:#d97706;--shadow:0 8px 32px rgba(0,0,0,.06);--glow:0 0 20px rgba(217,119,6,.1);--swatch:#d97706}
-[data-theme=cyber]{--bg:linear-gradient(135deg,#0f0a1a,#1a0a2e);--card:rgba(25,15,45,.92);--text:#f0eef8;--t2:#b8b0d0;--t3:#706898;--acc:#22d3ee;--acc2:#a78bfa;--bd:rgba(34,211,238,.14);--hover:rgba(34,211,238,.08);--red:#fb7185;--green:#6ee7b7;--gold:#fde047;--orange:#f97316;--input-bg:rgba(34,211,238,.06);--shadow2:0 0 16px rgba(34,211,238,.12);--bbg:rgba(251,113,133,.18);--bsg:rgba(110,231,183,.18);--bhg:rgba(253,224,71,.18);--bc:#fb7185;--sc:#6ee7b7;--hc:#fde047;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(34,211,238,.12);--swatch:#22d3ee}
+:root{--bg:linear-gradient(135deg,#0b1525,#1a2a48);--card:rgba(20,32,52,.93);--text:#f0f6fe;--t2:#b8cde0;--t3:#7a94b0;--acc:#38bdf8;--acc2:#6366f1;--bd:rgba(56,189,248,.15);--hover:rgba(56,189,248,.08);--red:#f87171;--green:#34d399;--gold:#fbbf24;--orange:#f97316;--input-bg:rgba(56,189,248,.06);--shadow2:0 4px 20px rgba(0,0,0,.45);--bbg:rgba(248,113,113,.15);--bsg:rgba(52,211,153,.15);--bhg:rgba(251,191,36,.15);--bc:#f87171;--sc:#34d399;--hc:#fbbf24;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(56,189,248,.12);--swatch:#38bdf8}
+[data-theme=amber]{--bg:linear-gradient(135deg,#18120a,#2a2015);--card:rgba(32,24,18,.93);--text:#f5ece2;--t2:#d4c0aa;--t3:#a08e78;--acc:#f59e0b;--acc2:#d97706;--bd:rgba(245,158,11,.15);--hover:rgba(245,158,11,.07);--red:#f87171;--green:#34d399;--gold:#fbbf24;--orange:#d97706;--input-bg:rgba(245,158,11,.06);--shadow2:0 4px 20px rgba(0,0,0,.45);--bbg:rgba(248,113,113,.14);--bsg:rgba(52,211,153,.14);--bhg:rgba(251,191,36,.16);--bc:#f87171;--sc:#34d399;--hc:#fbbf24;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(245,158,11,.12);--swatch:#f59e0b}
+[data-theme=jade]{--bg:linear-gradient(135deg,#081810,#0f2618);--card:rgba(15,36,22,.93);--text:#e6f2ec;--t2:#a8c4b4;--t3:#689682;--acc:#34d399;--acc2:#10b981;--bd:rgba(52,211,153,.14);--hover:rgba(52,211,153,.07);--red:#fb7185;--green:#6ee7b7;--gold:#fde047;--orange:#f97316;--input-bg:rgba(52,211,153,.06);--shadow2:0 4px 20px rgba(0,0,0,.45);--bbg:rgba(251,113,133,.14);--bsg:rgba(110,231,183,.14);--bhg:rgba(253,224,71,.14);--bc:#fb7185;--sc:#6ee7b7;--hc:#fde047;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(52,211,153,.12);--swatch:#34d399}
+[data-theme=rose]{--bg:linear-gradient(135deg,#180c0e,#2a1418);--card:rgba(36,18,22,.93);--text:#f5eaec;--t2:#d0b8bc;--t3:#a07a84;--acc:#fb7185;--acc2:#f43f5e;--bd:rgba(251,113,133,.14);--hover:rgba(251,113,133,.07);--red:#fb7185;--green:#6ee7b7;--gold:#fde047;--orange:#f97316;--input-bg:rgba(251,113,133,.06);--shadow2:0 4px 20px rgba(0,0,0,.45);--bbg:rgba(251,113,133,.16);--bsg:rgba(110,231,183,.14);--bhg:rgba(253,224,71,.14);--bc:#fb7185;--sc:#6ee7b7;--hc:#fde047;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(251,113,133,.12);--swatch:#fb7185}
+[data-theme=lunar]{--bg:linear-gradient(135deg,#f0f4f8,#e2e8f0);--card:rgba(255,255,255,.94);--text:#1e293b;--t2:#64748b;--t3:#94a3b8;--acc:#3b82f6;--acc2:#6366f1;--bd:rgba(59,130,246,.12);--hover:rgba(59,130,246,.06);--red:#dc2626;--green:#059669;--gold:#d97706;--orange:#ea580c;--input-bg:rgba(59,130,246,.04);--shadow2:0 4px 16px rgba(0,0,0,.04);--bbg:rgba(220,38,38,.10);--bsg:rgba(5,150,105,.10);--bhg:rgba(217,119,6,.10);--bc:#dc2626;--sc:#059669;--hc:#d97706;--shadow:0 8px 32px rgba(0,0,0,.04);--glow:0 0 20px rgba(59,130,246,.08);--swatch:#94a3b8}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
 .container{max-width:1400px;margin:0 auto;padding:16px}
@@ -275,9 +277,11 @@ body, .header, .stock-card, .sector-tab, .index-item, .overview, .advice, .chart
   <div class="header-controls">
     <button class="header-btn" id="guideBtn" title="新手指南">📖</button>
     <div class="theme-swatches" id="themeSwatches">
-      <button class="swatch" data-theme="dark" style="background:#38bdf8" title="深海"></button>
-      <button class="swatch" data-theme="aurora" style="background:#d97706" title="晨曦"></button>
-      <button class="swatch" data-theme="cyber" style="background:#22d3ee" title="星河"></button>
+      <button class="swatch" data-theme="" style="background:#38bdf8" title="极光蓝"></button>
+      <button class="swatch" data-theme="amber" style="background:#f59e0b" title="琥珀金"></button>
+      <button class="swatch" data-theme="jade" style="background:#34d399" title="翡翠绿"></button>
+      <button class="swatch" data-theme="rose" style="background:#fb7185" title="玫瑰红"></button>
+      <button class="swatch" data-theme="lunar" style="background:#94a3b8" title="皓月白"></button>
     </div>
     <div class="search-box">
     <input id="searchInput" placeholder="代码或名称">
@@ -674,7 +678,7 @@ function switchChart(t) {
 function renderChart() {
   if (!myChart || !cached.length) return;
   var k=cached,dates=k.map(function(x){return x.date;}),c=k.map(function(x){return x.close;}),h=k.map(function(x){return x.high;}),l=k.map(function(x){return x.low;}),o=k.map(function(x){return x.open;}),v=k.map(function(x){return x.volume;});
-  var C={bg:"rgba(20,25,50,.9)",bd:"rgba(56,189,248,.2)",text:"#e2e8f0",t2:"#8899c0",up:"#f87171",dn:"#34d399"},sl={height:8,bottom:0,borderColor:C.bd,backgroundColor:"transparent"};
+  function tc(n,f){var v=getComputedStyle(document.documentElement).getPropertyValue(n);return v.trim()||f;}var C={bg:tc("--card","rgba(20,32,52,.93)"),bd:tc("--bd","rgba(56,189,248,.15)"),text:tc("--text","#f0f6fe"),t2:tc("--t2","#b8cde0"),up:tc("--red","#f87171"),dn:tc("--green","#34d399")},sl={height:8,bottom:0,borderColor:C.bd,backgroundColor:"transparent"};
   if(chartType==="kline"){
     var m5=TA.ma(c,5),m10=TA.ma(c,10),m20=TA.ma(c,20),m60=TA.ma(c,60);
     myChart.setOption({animation:true,animationDuration:800,animationEasing:"elasticOut",
@@ -804,7 +808,7 @@ function renderOverview(quote) {
   const isUp = f.changeAmt >= 0;
   const pe = document.getElementById('ovPrice');
   pe.textContent = (f.price || 0).toFixed(2);
-  pe.style.color = isUp ? '#e74c3c' : '#27ae60';
+  pe.style.color = isUp ? 'var(--red)' : 'var(--green)';
   document.getElementById('ovMeta').innerHTML = [
     ['最高', (f.high||0).toFixed(2)], ['最低', (f.low||0).toFixed(2)], ['开盘', (f.open||0).toFixed(2)], ['昨收', (f.prevClose||0).toFixed(2)],
     ['成交量', fmtVol(f.volume||0)+'手'], ['成交额', fmtAmt(f.amount||0)], ['涨幅', (f.changePct>=0?'+':'')+f.changePct.toFixed(2)+'%'], ['涨跌', (f.changeAmt>=0?'+':'')+f.changeAmt.toFixed(2)],
@@ -1135,7 +1139,7 @@ function renderStockList(quotes, codes) {
       return `<div class="stock-card" style="animation-delay:${idx*0.04}s">
         <div style="display:flex;justify-content:space-between;align-items:center" onclick="loadStock('${q.code}')">
           <div><span class="s-name">${q.name}</span><span class="s-code">${q.code}</span></div>
-          <span style="cursor:pointer;font-size:14px;color:${w.includes(q.code)?'#fbbf24':'var(--t3)'}" onclick="event.stopPropagation();toggleWatch('${q.code}');this.textContent=isWatched('${q.code}')?'★':'☆';this.style.color=isWatched('${q.code}')?'#fbbf24':'var(--t3)'">${star}</span>
+          <span style="cursor:pointer;font-size:14px;color:${w.includes(q.code)?'var(--gold)':'var(--t3)'}" onclick="event.stopPropagation();toggleWatch('${q.code}');this.textContent=isWatched('${q.code}')?'★':'☆';this.style.color=isWatched('${q.code}')?'#fbbf24':'var(--t3)'">${star}</span>
         </div>
         <div class="s-price" style="color:${isUp ? 'var(--red)' : 'var(--green)'}" onclick="loadStock('${q.code}')">${q.price.toFixed(2)}<span class="s-chg ${isUp ? 'up' : 'down'}">${q.changePct >= 0 ? '+' : ''}${q.changePct.toFixed(2)}%</span></div>
       </div>`;
@@ -1248,7 +1252,7 @@ document.getElementById('guideBtn')?.addEventListener('click', () => {
 
 /* ===== 主题切换 ===== */
 (function initTheme() {
-  var current = localStorage.getItem('stock-theme') || 'dark';
+  var current = localStorage.getItem('stock-theme') || '';
   function applyTheme(name) {
     current = name;
     // 闪一下过渡
@@ -1258,7 +1262,8 @@ document.getElementById('guideBtn')?.addEventListener('click', () => {
     requestAnimationFrame(function(){ f.style.opacity='0'; });
     setTimeout(function(){ f.remove(); }, 300);
     
-    document.documentElement.setAttribute('data-theme', name);
+    if (name) document.documentElement.setAttribute('data-theme', name);
+    else document.documentElement.removeAttribute('data-theme');
     localStorage.setItem('stock-theme', name);
     document.querySelectorAll('.swatch').forEach(function(el){
       el.classList.toggle('active', el.dataset.theme === name);
