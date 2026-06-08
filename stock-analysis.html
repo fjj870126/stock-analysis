@@ -7,9 +7,9 @@
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
-:root{--bg:linear-gradient(135deg,#0a0e1a,#111827);--card:rgba(17,24,39,.88);--text:#f1f5f9;--t2:#94a3b8;--t3:#64748b;--acc:#38bdf8;--acc2:#818cf8;--bd:rgba(56,189,248,.15);--hover:rgba(56,189,248,.1);--red:#f87171;--green:#34d399;--gold:#fbbf24;--orange:#f97316;--input-bg:rgba(56,189,248,.08);--shadow2:0 4px 16px rgba(0,0,0,.4);--bbg:rgba(248,113,113,.16);--bsg:rgba(52,211,153,.16);--bhg:rgba(251,191,36,.16);--bc:#f87171;--sc:#34d399;--hc:#fbbf24;--shadow:0 8px 32px rgba(0,0,0,.4);--glow:0 0 24px rgba(56,189,248,.12);--swatch:#38bdf8}
-[data-theme=aurora]{--bg:linear-gradient(135deg,#fff7ed,#fef3c7);--card:rgba(255,255,255,.9);--text:#1c1917;--t2:#57534e;--t3:#a8a29e;--acc:#f59e0b;--acc2:#f97316;--bd:rgba(245,158,11,.12);--hover:rgba(245,158,11,.06);--red:#dc2626;--green:#059669;--gold:#d97706;--orange:#ea580c;--input-bg:rgba(245,158,11,.04);--shadow2:0 4px 16px rgba(0,0,0,.06);--bbg:rgba(220,38,38,.10);--bsg:rgba(5,150,105,.10);--bhg:rgba(217,119,6,.10);--bc:#dc2626;--sc:#059669;--hc:#d97706;--shadow:0 8px 32px rgba(0,0,0,.06);--glow:0 0 20px rgba(245,158,11,.08);--swatch:#f59e0b}
-[data-theme=cyber]{--bg:linear-gradient(135deg,#0a0a1a,#1a0a2e);--card:rgba(20,10,40,.88);--text:#e4e4f0;--t2:#a0a0c0;--t3:#606080;--acc:#22d3ee;--acc2:#a78bfa;--bd:rgba(34,211,238,.12);--hover:rgba(34,211,238,.08);--red:#fb7185;--green:#6ee7b7;--gold:#fde047;--orange:#f97316;--input-bg:rgba(34,211,238,.06);--shadow2:0 0 16px rgba(34,211,238,.15);--bbg:rgba(251,113,133,.16);--bsg:rgba(110,231,183,.16);--bhg:rgba(253,224,71,.16);--bc:#fb7185;--sc:#6ee7b7;--hc:#fde047;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(34,211,238,.12);--swatch:#22d3ee}
+:root{--bg:linear-gradient(135deg,#0f172a,#1e293b);--card:rgba(30,41,59,.92);--text:#f8fafc;--t2:#cbd5e1;--t3:#94a3b8;--acc:#38bdf8;--acc2:#818cf8;--bd:rgba(56,189,248,.18);--hover:rgba(56,189,248,.1);--red:#f87171;--green:#34d399;--gold:#fbbf24;--orange:#f97316;--input-bg:rgba(56,189,248,.08);--shadow2:0 4px 16px rgba(0,0,0,.5);--bbg:rgba(248,113,113,.2);--bsg:rgba(52,211,153,.2);--bhg:rgba(251,191,36,.2);--bc:#f87171;--sc:#34d399;--hc:#fbbf24;--shadow:0 8px 32px rgba(0,0,0,.5);--glow:0 0 24px rgba(56,189,248,.15);--swatch:#38bdf8}
+[data-theme=aurora]{--bg:linear-gradient(135deg,#fefce8,#fef9c3);--card:rgba(255,255,255,.92);--text:#1c1917;--t2:#57534e;--t3:#a8a29e;--acc:#d97706;--acc2:#ea580c;--bd:rgba(217,119,6,.12);--hover:rgba(217,119,6,.07);--red:#dc2626;--green:#059669;--gold:#d97706;--orange:#ea580c;--input-bg:rgba(217,119,6,.04);--shadow2:0 4px 16px rgba(0,0,0,.06);--bbg:rgba(220,38,38,.12);--bsg:rgba(5,150,105,.12);--bhg:rgba(217,119,6,.12);--bc:#dc2626;--sc:#059669;--hc:#d97706;--shadow:0 8px 32px rgba(0,0,0,.06);--glow:0 0 20px rgba(217,119,6,.1);--swatch:#d97706}
+[data-theme=cyber]{--bg:linear-gradient(135deg,#0f0a1a,#1a0a2e);--card:rgba(25,15,45,.92);--text:#f0eef8;--t2:#b8b0d0;--t3:#706898;--acc:#22d3ee;--acc2:#a78bfa;--bd:rgba(34,211,238,.14);--hover:rgba(34,211,238,.08);--red:#fb7185;--green:#6ee7b7;--gold:#fde047;--orange:#f97316;--input-bg:rgba(34,211,238,.06);--shadow2:0 0 16px rgba(34,211,238,.12);--bbg:rgba(251,113,133,.18);--bsg:rgba(110,231,183,.18);--bhg:rgba(253,224,71,.18);--bc:#fb7185;--sc:#6ee7b7;--hc:#fde047;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(34,211,238,.12);--swatch:#22d3ee}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
 .container{max-width:1400px;margin:0 auto;padding:16px}
@@ -225,7 +225,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
     <button class="header-btn" id="guideBtn" title="新手指南">📖</button>
     <div class="theme-swatches" id="themeSwatches">
       <button class="swatch" data-theme="dark" style="background:#38bdf8" title="深海"></button>
-      <button class="swatch" data-theme="aurora" style="background:#f59e0b" title="晨曦"></button>
+      <button class="swatch" data-theme="aurora" style="background:#d97706" title="晨曦"></button>
       <button class="swatch" data-theme="cyber" style="background:#22d3ee" title="星河"></button>
     </div>
     <div class="search-box">
@@ -621,77 +621,74 @@ function switchChart(t) {
 }
 function renderChart() {
   if (!myChart || !cached.length) return;
-  var km = cached, dates = km.map(function(x){return x.date;}), c = km.map(function(x){return x.close;}), h = km.map(function(x){return x.high;}), l = km.map(function(x){return x.low;}), o = km.map(function(x){return x.open;}), v = km.map(function(x){return x.volume;});
-  var C0={bg:"rgba(20,25,50,.9)",bd:"rgba(56,189,248,.2)",text:"#e2e8f0",t2:"#8899c0",up:"#f87171",dn:"#34d399"};
-  var sd={height:8,bottom:0,borderColor:C0.bd,backgroundColor:"transparent",dataBackground:{lineStyle:{color:C0.t2,width:.5},areaStyle:{color:"rgba(100,120,160,.08)"}},selectedDataBackground:{lineStyle:{color:"#38bdf8",width:1},areaStyle:{color:"rgba(56,189,248,.15)"}},handleStyle:{color:"#38bdf8"},textStyle:{color:C0.t2,fontSize:9}};
+  var k=cached,dates=k.map(function(x){return x.date;}),c=k.map(function(x){return x.close;}),h=k.map(function(x){return x.high;}),l=k.map(function(x){return x.low;}),o=k.map(function(x){return x.open;}),v=k.map(function(x){return x.volume;});
+  var C={bg:"rgba(20,25,50,.9)",bd:"rgba(56,189,248,.2)",text:"#e2e8f0",t2:"#8899c0",up:"#f87171",dn:"#34d399"},sl={height:8,bottom:0,borderColor:C.bd,backgroundColor:"transparent"};
   if(chartType==="kline"){
     var m5=TA.ma(c,5),m10=TA.ma(c,10),m20=TA.ma(c,20),m60=TA.ma(c,60);
-    myChart.setOption({animation:true,animationDuration:800,animationEasing:"elasticOut",
-      tooltip:{trigger:"axis",axisPointer:{type:"cross",label:{backgroundColor:"#1a1e30",color:"#e2e8f0"}},backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12},
-        formatter:function(p){if(!p||!p[0])return"";var i=p[0].dataIndex,dp=p[0].data;var op=Array.isArray(dp)?dp[0]:0,cl=Array.isArray(dp)?dp[1]:0,lo=Array.isArray(dp)?dp[2]:0,hi=Array.isArray(dp)?dp[3]:0;var ch=cl-op,pt=op?(ch/op*100).toFixed(2):"0",vl=v[i]||0,dt=dates[i]||"";return"<b style=\"font-size:13px;color:#fbbf24\">"+dt+"</b><br/>\u5f00 "+op.toFixed(2)+" | \u6536 <b style=\"color:"+(ch>=0?C0.up:C0.dn)+"\">"+cl.toFixed(2)+"</b><br/>\u9ad8 "+hi.toFixed(2)+" | \u4f4e "+lo.toFixed(2)+"<br/>\u6da8\u5e45 <b style=\"color:"+(ch>=0?C0.up:C0.dn)+"\">"+(ch>=0?"+":"")+pt+"%</b> | \u91cf "+(vl/10000).toFixed(0)+"\u4e07";}
-      },
+    myChart.setOption({animation:true,animationDuration:600,
+      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
       grid:[{left:"5%",right:"5%",top:"9%",height:"56%"},{left:"5%",right:"5%",top:"73%",height:"19%"}],
-      xAxis:[{type:"category",data:dates,gridIndex:0,axisLine:{lineStyle:{color:C0.bd}},axisLabel:{fontSize:10,color:C0.t2,hideOverlap:true}},{type:"category",data:dates,gridIndex:1,axisLabel:{show:false}}],
-      yAxis:[{type:"value",gridIndex:0,scale:true,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},{type:"value",gridIndex:1,splitLine:{show:false},axisLabel:{fontSize:10,color:C0.t2}}],
+      xAxis:[{type:"category",data:dates,gridIndex:0},{type:"category",data:dates,gridIndex:1,axisLabel:{show:false}}],
+      yAxis:[{type:"value",gridIndex:0,scale:true},{type:"value",gridIndex:1,splitLine:{show:false}}],
       series:[
-        {name:"K\u7ebf",type:"candlestick",xAxisIndex:0,yAxisIndex:0,data:km.map(function(x){return[x.open,x.close,x.low,x.high];}),itemStyle:{color:C0.up,color0:C0.dn,borderColor:C0.up,borderColor0:C0.dn,shadowBlur:6,shadowColor:"rgba(0,0,0,.4)"},animationDelay:function(idx){return idx*2;}},
-        {name:"MA5",type:"line",xAxisIndex:0,yAxisIndex:0,data:m5,smooth:true,symbol:"none",connectNulls:true,lineStyle:{width:2,color:"#ff9800"},endLabel:{show:true,formatter:"MA5",color:"#ff9800",fontSize:11},animationDelay:function(idx){return idx*2+30;}},
-        {name:"MA10",type:"line",xAxisIndex:0,yAxisIndex:0,data:m10,smooth:true,symbol:"none",connectNulls:true,lineStyle:{width:2,color:"#2196f3"},endLabel:{show:true,formatter:"MA10",color:"#2196f3",fontSize:11},animationDelay:function(idx){return idx*2+60;}},
-        {name:"MA20",type:"line",xAxisIndex:0,yAxisIndex:0,data:m20,smooth:true,symbol:"none",connectNulls:true,lineStyle:{width:2,color:"#9c27b0"},endLabel:{show:true,formatter:"MA20",color:"#9c27b0",fontSize:11},animationDelay:function(idx){return idx*2+90;}},
-        {name:"MA60",type:"line",xAxisIndex:0,yAxisIndex:0,data:m60,smooth:true,symbol:"none",connectNulls:true,lineStyle:{width:1.5,color:"#607d8b"},endLabel:{show:true,formatter:"MA60",color:"#607d8b",fontSize:11},animationDelay:function(idx){return idx*2+120;}},
-        {name:"\u91cf",type:"bar",xAxisIndex:1,yAxisIndex:1,data:v.map(function(x,i){return{value:x,itemStyle:{color:c[i]>=o[i]?C0.up:C0.dn,opacity:.4,borderRadius:[2,2,0,0]}};})}
+        {name:"K线",type:"candlestick",xAxisIndex:0,yAxisIndex:0,data:k.map(function(x){return[x.open,x.close,x.low,x.high];}),itemStyle:{color:C.up,color0:C.dn,borderColor:C.up,borderColor0:C.dn}},
+        {name:"MA5",type:"line",xAxisIndex:0,yAxisIndex:0,data:m5,symbol:"none",lineStyle:{color:"#ff9800",width:1.5}},
+        {name:"MA10",type:"line",xAxisIndex:0,yAxisIndex:0,data:m10,symbol:"none",lineStyle:{color:"#2196f3",width:1.5}},
+        {name:"MA20",type:"line",xAxisIndex:0,yAxisIndex:0,data:m20,symbol:"none",lineStyle:{color:"#9c27b0",width:1.5}},
+        {name:"MA60",type:"line",xAxisIndex:0,yAxisIndex:0,data:m60,symbol:"none",lineStyle:{color:"#607d8b",width:1.5}},
+        {name:"量",type:"bar",xAxisIndex:1,yAxisIndex:1,data:v.map(function(x,i){return{value:x,itemStyle:{color:c[i]>=o[i]?C.up:C.dn,opacity:.4}};})}
       ],
-      legend:{data:["MA5","MA10","MA20","MA60"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
+      legend:{data:["MA5","MA10","MA20","MA60"],top:0,left:"center",textStyle:{fontSize:10,color:C.t2}},
       dataZoom:[{type:"inside",xAxisIndex:[0,1],start:0,end:100},{type:"slider",xAxisIndex:[0,1],start:0,end:100}]
     },true);
   }else if(chartType==="macd"){
     var md=TA.macd(c);
-    myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
-      tooltip:{trigger:"axis",backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12}},
+    myChart.setOption({animation:true,animationDuration:400,
+      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
       grid:{left:"5%",right:"5%",top:"10%",bottom:"10%"},
-      xAxis:{type:"category",data:dates,axisLabel:{fontSize:10,color:C0.t2,hideOverlap:true},axisLine:{lineStyle:{color:C0.bd}}},
-      yAxis:{type:"value",scale:true,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},
+      xAxis:{type:"category",data:dates},
+      yAxis:{type:"value",scale:true},
       series:[
-        {name:"DIF",type:"line",data:md.dif,symbol:"none",smooth:true,lineStyle:{color:"#2196f3",width:2.5},areaStyle:{color:"rgba(33,150,243,.06)"}},
-        {name:"DEA",type:"line",data:md.dea,symbol:"none",smooth:true,lineStyle:{color:"#ff9800",width:2.5}},
-        {name:"MACD",type:"bar",data:md.bar.map(function(v){return{value:v,itemStyle:{color:v>=0?"#f87171":"#34d399",opacity:.7,borderRadius:[3,3,0,0]}};})}
+        {name:"DIF",type:"line",data:md.dif,symbol:"none",lineStyle:{color:"#2196f3",width:2}},
+        {name:"DEA",type:"line",data:md.dea,symbol:"none",lineStyle:{color:"#ff9800",width:2}},
+        {name:"MACD",type:"bar",data:md.bar.map(function(v){return{value:v,itemStyle:{color:v>=0?"#f87171":"#34d399"}};})}
       ],
-      legend:{data:["DIF","DEA","MACD"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
-      dataZoom:[{type:"inside",start:0,end:100},{type:"slider",start:0,end:100}]
+      legend:{data:["DIF","DEA","MACD"],top:0,left:"center",textStyle:{fontSize:10}},
+      dataZoom:[{type:"inside"},{type:"slider"}]
     },true);
   }else if(chartType==="kdj"){
     var kdj=TA.kdj(h,l,c);
-    myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
-      tooltip:{trigger:"axis",backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12}},
+    myChart.setOption({animation:true,animationDuration:400,
+      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
       grid:{left:"5%",right:"5%",top:"10%",bottom:"10%"},
-      xAxis:{type:"category",data:dates,axisLabel:{fontSize:10,color:C0.t2,hideOverlap:true},axisLine:{lineStyle:{color:C0.bd}}},
-      yAxis:{type:"value",min:0,max:100,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},
+      xAxis:{type:"category",data:dates},
+      yAxis:{type:"value",min:0,max:100},
       series:[
-        {name:"K",type:"line",data:kdj.k,symbol:"none",smooth:true,lineStyle:{color:"#f87171",width:2.5}},
-        {name:"D",type:"line",data:kdj.d,symbol:"none",smooth:true,lineStyle:{color:"#2196f3",width:2.5}},
-        {name:"J",type:"line",data:kdj.j,symbol:"none",smooth:true,lineStyle:{color:"#9c27b0",width:1.5,type:"dashed"}},
-        {name:"\u8d85\u4e70",type:"line",data:Array(c.length).fill(80),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
-        {name:"\u8d85\u5356",type:"line",data:Array(c.length).fill(20),symbol:"none",lineStyle:{color:"#34d399",width:1,type:"dotted"}}
+        {name:"K",type:"line",data:kdj.k,symbol:"none",lineStyle:{color:"#f87171",width:2}},
+        {name:"D",type:"line",data:kdj.d,symbol:"none",lineStyle:{color:"#2196f3",width:2}},
+        {name:"J",type:"line",data:kdj.j,symbol:"none",lineStyle:{color:"#9c27b0",width:1.5,type:"dashed"}},
+        {name:"超买",type:"line",data:Array(c.length).fill(80),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
+        {name:"超卖",type:"line",data:Array(c.length).fill(20),symbol:"none",lineStyle:{color:"#34d399",width:1,type:"dotted"}}
       ],
-      legend:{data:["K","D","J"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
-      dataZoom:[{type:"inside",start:0,end:100},{type:"slider",start:0,end:100}]
+      legend:{data:["K","D","J"],top:0,left:"center",textStyle:{fontSize:10}},
+      dataZoom:[{type:"inside"},{type:"slider"}]
     },true);
   }else if(chartType==="rsi"){
     var r6=TA.rsi(c,6),r12=TA.rsi(c,12),r24=TA.rsi(c,24);
-    myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
-      tooltip:{trigger:"axis",backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12}},
+    myChart.setOption({animation:true,animationDuration:400,
+      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
       grid:{left:"5%",right:"5%",top:"10%",bottom:"10%"},
-      xAxis:{type:"category",data:dates,axisLabel:{fontSize:10,color:C0.t2,hideOverlap:true},axisLine:{lineStyle:{color:C0.bd}}},
-      yAxis:{type:"value",min:0,max:100,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},
+      xAxis:{type:"category",data:dates},
+      yAxis:{type:"value",min:0,max:100},
       series:[
-        {name:"RSI6",type:"line",data:r6,symbol:"none",smooth:true,lineStyle:{color:"#f87171",width:2.5}},
-        {name:"RSI12",type:"line",data:r12,symbol:"none",smooth:true,lineStyle:{color:"#ff9800",width:2}},
-        {name:"RSI24",type:"line",data:r24,symbol:"none",smooth:true,lineStyle:{color:"#9c27b0",width:1.5,type:"dashed"}},
-        {name:"\u8d85\u4e70",type:"line",data:Array(c.length).fill(70),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
-        {name:"\u8d85\u5356",type:"line",data:Array(c.length).fill(30),symbol:"none",lineStyle:{color:"#34d399",width:1,type:"dotted"}}
+        {name:"RSI6",type:"line",data:r6,symbol:"none",lineStyle:{color:"#f87171",width:2}},
+        {name:"RSI12",type:"line",data:r12,symbol:"none",lineStyle:{color:"#ff9800",width:1.5}},
+        {name:"RSI24",type:"line",data:r24,symbol:"none",lineStyle:{color:"#9c27b0",width:1.5,type:"dashed"}},
+        {name:"超买",type:"line",data:Array(c.length).fill(70),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
+        {name:"超卖",type:"line",data:Array(c.length).fill(30),symbol:"none",lineStyle:{color:"#34d399",width:1,type:"dotted"}}
       ],
-      legend:{data:["RSI6","RSI12","RSI24"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
-      dataZoom:[{type:"inside",start:0,end:100},{type:"slider",start:0,end:100}]
+      legend:{data:["RSI6","RSI12","RSI24"],top:0,left:"center",textStyle:{fontSize:10}},
+      dataZoom:[{type:"inside"},{type:"slider"}]
     },true);
   }else if(chartType==="timeline"){
     if(!cached.length)return;
@@ -701,23 +698,21 @@ function renderChart() {
       var d2=res.data;if(!d2||!d2.lines)return;
       var times=d2.lines.map(function(x){return x.time;}),prices=d2.lines.map(function(x){return x.price;}),vols=d2.lines.map(function(x){return x.volume;});
       var avg=d2.prevClose||prices[0],cols=prices.map(function(p){return p>=avg?"#f87171":"#34d399";});
-      myChart.setOption({animation:true,animationDuration:800,animationEasing:"cubicOut",
-        tooltip:{trigger:"axis",axisPointer:{type:"cross",label:{backgroundColor:"#1a1e30",color:"#e2e8f0"}},backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12}},
+      myChart.setOption({animation:true,animationDuration:600,
+        tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
         grid:[{left:"5%",right:"5%",top:"9%",height:"56%"},{left:"5%",right:"5%",top:"73%",height:"19%"}],
-        xAxis:[{type:"category",data:times,gridIndex:0,axisLabel:{fontSize:10,color:C0.t2,interval:30},axisLine:{lineStyle:{color:C0.bd}}},{type:"category",data:times,gridIndex:1,axisLabel:{show:false}}],
-        yAxis:[{type:"value",gridIndex:0,scale:true,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},{type:"value",gridIndex:1,splitLine:{show:false},axisLabel:{fontSize:10,color:C0.t2}}],
+        xAxis:[{type:"category",data:times,gridIndex:0},{type:"category",data:times,gridIndex:1,axisLabel:{show:false}}],
+        yAxis:[{type:"value",gridIndex:0,scale:true},{type:"value",gridIndex:1,splitLine:{show:false}}],
         series:[
-          {name:"\u4ef7\u683c",type:"line",xAxisIndex:0,yAxisIndex:0,data:prices,symbol:"none",smooth:true,lineStyle:{width:2.5,color:"#38bdf8"},areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:"rgba(56,189,248,.25)"},{offset:1,color:"rgba(56,189,248,.02)"}]}}},
-          {name:"\u5747\u4ef7",type:"line",xAxisIndex:0,yAxisIndex:0,data:Array(prices.length).fill(avg),symbol:"none",lineStyle:{width:1,color:"#fbbf24",type:"dashed",opacity:.7}},
-          {name:"\u6210\u4ea4\u91cf",type:"bar",xAxisIndex:1,yAxisIndex:1,data:vols.map(function(v,i){return{value:v,itemStyle:{color:cols[i],opacity:.4,borderRadius:[2,2,0,0]}};})}
+          {name:"价格",type:"line",xAxisIndex:0,yAxisIndex:0,data:prices,symbol:"none",smooth:true,lineStyle:{width:2,color:"#38bdf8"},areaStyle:{color:"rgba(56,189,248,0.1)"}},
+          {name:"均价",type:"line",xAxisIndex:0,yAxisIndex:0,data:Array(prices.length).fill(avg),symbol:"none",lineStyle:{width:1,color:"#fbbf24",type:"dashed"}},
+          {name:"成交量",type:"bar",xAxisIndex:1,yAxisIndex:1,data:vols.map(function(v,i){return{value:v,itemStyle:{color:cols[i],opacity:.4}};})}
         ],
-        legend:{data:["\u4ef7\u683c","\u5747\u4ef7"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
+        legend:{data:["价格","均价"],top:0,left:"center",textStyle:{fontSize:10}},
         dataZoom:[{type:"inside",xAxisIndex:[0,1],start:0,end:100}]
       },true);
     });
   }
-  // apply slider
-  try{var oo=myChart.getOption();if(oo.dataZoom&&oo.dataZoom[1]){oo.dataZoom[1]=Object.assign({},sd,oo.dataZoom[1]);myChart.setOption(oo,true);}}catch(e){}
 }function showLoading(s) { document.getElementById('loading').classList.toggle('active', s); }
 function showError(msg) { const e = document.getElementById('errorBox'); e.textContent = msg || ''; e.classList.toggle('active', !!msg); }
 function fmtVol(v) { if (v >= 1e8) return (v / 1e8).toFixed(2) + '亿'; if (v >= 1e4) return (v / 1e4).toFixed(2) + '万'; return v.toFixed(0); }
