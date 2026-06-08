@@ -65,6 +65,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .sort-btn:hover{background:var(--hover);color:var(--acc);border-color:var(--acc)}
 .sort-btn.active{background:var(--acc);color:#fff;border-color:var(--acc)}
 
+
+/* 大盘指数栏 */
+.index-bar{display:flex;gap:10px;margin-bottom:12px;overflow-x:auto;padding:2px 0}
+.index-item{background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:8px 16px;flex:1;min-width:140px;text-align:center;backdrop-filter:blur(12px);box-shadow:var(--shadow);transition:all .2s}
+.index-item:hover{border-color:var(--acc);transform:translateY(-1px)}
+.index-name{font-size:10px;color:var(--t3);margin-bottom:2px}
+.index-price{font-size:18px;font-weight:700}
+.index-pct{font-size:11px;font-weight:500;margin-left:6px}
+.index-pct.up{color:var(--red)}
+.index-pct.down{color:var(--green)}
+.index-chg{font-size:10px;margin-left:4px;opacity:.7}
 /* 板块标签 — 药丸形 */
 .sector-tab{border:1px solid var(--bd);background:var(--card);cursor:pointer;text-align:center;transition:all .2s;box-shadow:var(--shadow)}
 .sector-nav{display:flex;gap:6px;margin-bottom:8px}
@@ -122,6 +133,25 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .ov-meta-item .l{font-size:10px;color:var(--t2)}
 .ov-meta-item .v{font-size:13px;font-weight:600;margin-top:1px}
 
+
+/* 资金流向 */
+.moneyflow{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:14px 18px;margin-bottom:12px;box-shadow:var(--shadow);backdrop-filter:blur(16px);display:none}
+.moneyflow.active{display:block}
+.mf-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+.mf-header h3{font-size:14px}
+.mf-date{font-size:10px;color:var(--t3)}
+.mf-bar-row{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.mf-label{font-size:11px;color:var(--t2);min-width:64px;flex-shrink:0}
+.mf-track{flex:1;height:14px;border-radius:7px;background:var(--bg);position:relative;overflow:hidden}
+.mf-fill{height:100%;border-radius:7px;transition:width .6s cubic-bezier(.22,1,.36,1);min-width:2px}
+.mf-fill.inflow{background:linear-gradient(90deg,var(--red),#f87171)}
+.mf-fill.outflow{background:linear-gradient(90deg,var(--green),#34d399)}
+.mf-val{font-size:12px;font-weight:600;min-width:70px;text-align:right;flex-shrink:0}
+.mf-val.inflow{color:var(--red)}
+.mf-val.outflow{color:var(--green)}
+.mf-summary{text-align:center;padding:10px 0 2px;font-size:13px;font-weight:700;border-top:1px solid var(--bd);margin-top:6px}
+.mf-summary .inflow{color:var(--red)}
+.mf-summary .outflow{color:var(--green)}
 /* 买卖建议 */
 .overview,.advice,.chart-section,.indicators{display:none}
 .advice.active{display:block}
@@ -204,6 +234,11 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
     <div class="suggestions" id="suggestions"></div>
   </div>
 </div>
+</div>
+
+<!-- 大盘指数 -->
+<div class="index-bar" id="indexBar">
+  <div style="flex:1;text-align:center;color:var(--t3);font-size:11px;padding:8px">加载指数中...</div>
 </div>
 
 <!-- 教程 -->
@@ -399,6 +434,16 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
   <div class="ov-meta" id="ovMeta"></div>
 </div>
 
+<!-- 资金流向 -->
+<div class="moneyflow" id="moneyflow" style="display:none">
+  <div class="mf-header">
+    <h3>💰 资金流向</h3>
+    <span class="mf-date" id="mfDate"></span>
+  </div>
+  <div class="mf-bars" id="mfBars"></div>
+  <div class="mf-summary" id="mfSummary"></div>
+</div>
+
 <!-- 诊断 -->
 <div class="indicators" id="diagnose" style="display:none">
   <h3>📋 综合诊断</h3>
@@ -456,6 +501,7 @@ const API = {
   timeline: c => API.get(`/api/timeline?code=${c}`),
   sectors: () => API.get('/api/sectors'),
   sectorQuotes: codes => API.get(`/api/sector-quotes?codes=${codes.join(',')}`),
+  indexes: () => API.get('/api/indexes'),
   sectorHeat: () => API.get('/api/sector-heat'),
   news: () => API.get('/api/news'),
 };
@@ -810,7 +856,7 @@ function renderIndicators(result) {
 async function loadStock(code) {
   showError(null);
   document.getElementById('welcome').style.display = 'none';
-  ['overview','advice','chartSection','indicators','diagnose'].forEach(id => {
+  ['overview','advice','chartSection','indicators','diagnose','moneyflow'].forEach(id => {
     const el = document.getElementById(id);
     if (el) { el.classList.remove('active'); el.style.display = 'none'; }
   });
@@ -826,6 +872,7 @@ async function loadStock(code) {
       if (el) el.style.display = '';
     });
     renderOverview(qr);
+    API.moneyflow(code).then(function(r){renderMoneyflow(r.data);}).catch(function(){});
     const result = analyzeSignals(cached);
     renderAdvice(result);
     renderDiagnose(result);
@@ -875,6 +922,19 @@ async function loadSectorHeat() {
     });
   } catch(e){}
 }
+async function loadIndexes() {
+  try {
+    const res = await API.indexes();
+    const list = res.data || [];
+    const bar = document.getElementById("indexBar");
+    if (!list.length) { bar.innerHTML = '<div style="flex:1;text-align:center;color:var(--t3);font-size:11px;padding:8px">暂无</div>'; return; }
+    bar.innerHTML = list.map(function(idx){
+      var isUp = idx.changePct >= 0;
+      return '<div class="index-item"><div class="index-name">' + idx.name + '</div><div><span class="index-price">' + idx.price.toFixed(2) + '</span><span class="index-pct ' + (isUp?"up":"down") + '">' + (isUp?"+":"") + idx.changePct.toFixed(2) + '%</span><span class="index-chg" style="color:' + (isUp?"var(--red)":"var(--green)") + '">' + (isUp?"+":"") + idx.changeAmt.toFixed(2) + '</span></div></div>';
+    }).join("");
+  } catch(e){}
+}
+
 async function initSectors() {
   try {
     const res = await API.sectors();
@@ -1183,6 +1243,7 @@ document.addEventListener('DOMContentLoaded', function() {
   initTooltip();
   loadNews();
   initSectors();
+  loadIndexes();
   loadSectorHeat();
 });
 </script>
