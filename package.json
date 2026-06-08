@@ -4,9 +4,12 @@
   },
   "name": "stock-analysis",
   "version": "1.0.0",
-  "description": "¹ÉÆ±·ÖÎöÖúÊÖ",
+  "description": "Stock Analysis Tool",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
