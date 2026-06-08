@@ -703,7 +703,7 @@ function renderChart() {
         {name:"MA60",type:"line",xAxisIndex:0,yAxisIndex:0,data:m60,symbol:"none",lineStyle:{color:"#607d8b",width:1.5}},
         {name:"量",type:"bar",xAxisIndex:1,yAxisIndex:1,data:v.map(function(x,i){return{value:x,itemStyle:{color:c[i]>=o[i]?C.up:C.dn,opacity:.4}};})}
       ],
-      legend:{data:["MA5","MA10","MA20","MA60"],top:0,left:"center",textStyle:{fontSize:10,color:C.t2}},
+      legend:{data:["MA5","MA10","MA20","MA60"],top:0,left:"center",textStyle:{fontSize:10,color:C.text}},
       dataZoom:[{type:"inside",xAxisIndex:[0,1],start:0,end:100},{type:"slider",xAxisIndex:[0,1],start:0,end:100}]
     },true);
   }else if(chartType==="macd"){
@@ -727,7 +727,7 @@ function renderChart() {
         {name:"DEA",type:"line",data:md.dea,symbol:"none",lineStyle:{color:"#ff9800",width:2}},
         {name:"MACD",type:"bar",data:md.bar.map(function(v,i){return{value:v,itemStyle:{color:v>=0?"#f87171":"#34d399"}};})}
       ],
-      legend:{data:["DIF","DEA","MACD"],top:0,left:"center",textStyle:{fontSize:10}},
+      legend:{data:["DIF","DEA","MACD"],top:0,left:"center",textStyle:{fontSize:10,color:C.text}},
       dataZoom:[{type:"inside"},{type:"slider"}]
     },true);
   }else if(chartType==="kdj"){
@@ -753,7 +753,7 @@ function renderChart() {
         {name:"超买",type:"line",data:Array(c.length).fill(80),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
         {name:"超卖",type:"line",data:Array(c.length).fill(20),symbol:"none",lineStyle:{color:"#34d399",width:1,type:"dotted"}}
       ],
-      legend:{data:["K","D","J"],top:0,left:"center",textStyle:{fontSize:10}},
+      legend:{data:["K","D","J"],top:0,left:"center",textStyle:{fontSize:10,color:C.text}},
       dataZoom:[{type:"inside"},{type:"slider"}]
     },true);
   }else if(chartType==="rsi"){
@@ -779,7 +779,7 @@ function renderChart() {
         {name:"超买",type:"line",data:Array(c.length).fill(70),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
         {name:"超卖",type:"line",data:Array(c.length).fill(30),symbol:"none",lineStyle:{color:"#34d399",width:1,type:"dotted"}}
       ],
-      legend:{data:["RSI6","RSI12","RSI24"],top:0,left:"center",textStyle:{fontSize:10}},
+      legend:{data:["RSI6","RSI12","RSI24"],top:0,left:"center",textStyle:{fontSize:10,color:C.text}},
       dataZoom:[{type:"inside"},{type:"slider"}]
     },true);
   }else if(chartType==="timeline"){
@@ -808,7 +808,7 @@ function renderChart() {
           {name:"均价",type:"line",xAxisIndex:0,yAxisIndex:0,data:Array(prices.length).fill(avg),symbol:"none",lineStyle:{width:1,color:"#fbbf24",type:"dashed"}},
           {name:"成交量",type:"bar",xAxisIndex:1,yAxisIndex:1,data:vols.map(function(v,i){return{value:v,itemStyle:{color:cols[i],opacity:.4}};})}
         ],
-        legend:{data:["价格","均价"],top:0,left:"center",textStyle:{fontSize:10}},
+        legend:{data:["价格","均价"],top:0,left:"center",textStyle:{fontSize:10,color:C.text}},
         dataZoom:[{type:"inside",xAxisIndex:[0,1],start:0,end:100}]
       },true);
     });
