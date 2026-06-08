@@ -8,9 +8,6 @@
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 <style>
 :root{--bg:linear-gradient(135deg,#0b1525,#1a2a48);--card:rgba(20,32,52,.93);--text:#f0f6fe;--t2:#b8cde0;--t3:#7a94b0;--acc:#38bdf8;--acc2:#6366f1;--bd:rgba(56,189,248,.15);--hover:rgba(56,189,248,.08);--red:#f87171;--green:#34d399;--gold:#fbbf24;--orange:#f97316;--input-bg:rgba(56,189,248,.06);--shadow2:0 4px 20px rgba(0,0,0,.45);--bbg:rgba(248,113,113,.15);--bsg:rgba(52,211,153,.15);--bhg:rgba(251,191,36,.15);--bc:#f87171;--sc:#34d399;--hc:#fbbf24;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(56,189,248,.12);--swatch:#38bdf8}
-[data-theme=amber]{--bg:linear-gradient(135deg,#18120a,#2a2015);--card:rgba(32,24,18,.93);--text:#f5ece2;--t2:#d4c0aa;--t3:#a08e78;--acc:#f59e0b;--acc2:#d97706;--bd:rgba(245,158,11,.15);--hover:rgba(245,158,11,.07);--red:#f87171;--green:#34d399;--gold:#fbbf24;--orange:#d97706;--input-bg:rgba(245,158,11,.06);--shadow2:0 4px 20px rgba(0,0,0,.45);--bbg:rgba(248,113,113,.14);--bsg:rgba(52,211,153,.14);--bhg:rgba(251,191,36,.16);--bc:#f87171;--sc:#34d399;--hc:#fbbf24;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(245,158,11,.12);--swatch:#f59e0b}
-[data-theme=jade]{--bg:linear-gradient(135deg,#081810,#0f2618);--card:rgba(15,36,22,.93);--text:#e6f2ec;--t2:#a8c4b4;--t3:#689682;--acc:#34d399;--acc2:#10b981;--bd:rgba(52,211,153,.14);--hover:rgba(52,211,153,.07);--red:#fb7185;--green:#6ee7b7;--gold:#fde047;--orange:#f97316;--input-bg:rgba(52,211,153,.06);--shadow2:0 4px 20px rgba(0,0,0,.45);--bbg:rgba(251,113,133,.14);--bsg:rgba(110,231,183,.14);--bhg:rgba(253,224,71,.14);--bc:#fb7185;--sc:#6ee7b7;--hc:#fde047;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(52,211,153,.12);--swatch:#34d399}
-[data-theme=rose]{--bg:linear-gradient(135deg,#180c0e,#2a1418);--card:rgba(36,18,22,.93);--text:#f5eaec;--t2:#d0b8bc;--t3:#a07a84;--acc:#fb7185;--acc2:#f43f5e;--bd:rgba(251,113,133,.14);--hover:rgba(251,113,133,.07);--red:#fb7185;--green:#6ee7b7;--gold:#fde047;--orange:#f97316;--input-bg:rgba(251,113,133,.06);--shadow2:0 4px 20px rgba(0,0,0,.45);--bbg:rgba(251,113,133,.16);--bsg:rgba(110,231,183,.14);--bhg:rgba(253,224,71,.14);--bc:#fb7185;--sc:#6ee7b7;--hc:#fde047;--shadow:0 8px 32px rgba(0,0,0,.45);--glow:0 0 24px rgba(251,113,133,.12);--swatch:#fb7185}
 [data-theme=lunar]{--bg:linear-gradient(135deg,#f0f4f8,#e2e8f0);--card:rgba(255,255,255,.94);--text:#1e293b;--t2:#64748b;--t3:#94a3b8;--acc:#3b82f6;--acc2:#6366f1;--bd:rgba(59,130,246,.12);--hover:rgba(59,130,246,.06);--red:#dc2626;--green:#059669;--gold:#d97706;--orange:#ea580c;--input-bg:rgba(59,130,246,.04);--shadow2:0 4px 16px rgba(0,0,0,.04);--bbg:rgba(220,38,38,.10);--bsg:rgba(5,150,105,.10);--bhg:rgba(217,119,6,.10);--bc:#dc2626;--sc:#059669;--hc:#d97706;--shadow:0 8px 32px rgba(0,0,0,.04);--glow:0 0 20px rgba(59,130,246,.08);--swatch:#94a3b8}
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:13px;line-height:1.5}
@@ -278,9 +275,6 @@ body, .header, .stock-card, .sector-tab, .index-item, .overview, .advice, .chart
     <button class="header-btn" id="guideBtn" title="新手指南">📖</button>
     <div class="theme-swatches" id="themeSwatches">
       <button class="swatch" data-theme="" style="background:#38bdf8" title="极光蓝"></button>
-      <button class="swatch" data-theme="amber" style="background:#f59e0b" title="琥珀金"></button>
-      <button class="swatch" data-theme="jade" style="background:#34d399" title="翡翠绿"></button>
-      <button class="swatch" data-theme="rose" style="background:#fb7185" title="玫瑰红"></button>
       <button class="swatch" data-theme="lunar" style="background:#94a3b8" title="皓月白"></button>
     </div>
     <div class="search-box">
@@ -682,19 +676,19 @@ function renderChart() {
   if(chartType==="kline"){
     var m5=TA.ma(c,5),m10=TA.ma(c,10),m20=TA.ma(c,20),m60=TA.ma(c,60);
     myChart.setOption({animation:true,animationDuration:800,animationEasing:"elasticOut",
-            tooltip:{trigger:"axis",backgroundColor:'transparent',borderColor:'transparent',textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45);background:rgba(0,0,0,0)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
+            tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45);background:rgba(0,0,0,0)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
         formatter:function(p){if(!p||!p[0])return'';var i=p[0].dataIndex,dk=k[i],dt=dk.date,op=dk.open.toFixed(2),cl=dk.close.toFixed(2),hi=dk.high.toFixed(2),lo=dk.low.toFixed(2),vo=(dk.volume/10000).toFixed(0),up=dk.close>=dk.open,clr=up?C.up:C.dn;var m5v=m5[i]!==null?m5[i].toFixed(2):'--',m10v=m10[i]!==null?m10[i].toFixed(2):'--',m20v=m20[i]!==null?m20[i].toFixed(2):'--',m60v=m60[i]!==null?m60[i].toFixed(2):'--';var pct=((dk.close-dk.open)/dk.open*100).toFixed(2);return'<div style="font-family:inherit">'+
 '<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:'+C.text+'">'+dt+'</div>'+
 '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:12px">'+
 '<span><span style="color:'+C.t2+'">开 </span><b style="color:'+clr+'">'+op+'</b></span>'+
 '<span><span style="color:'+C.t2+'">收 </span><b style="color:'+clr+';font-size:14px">'+cl+'</b> <span style="color:'+clr+';font-size:11px">'+(up?'+':'')+pct+'%</span></span>'+
-'<span><span style="color:'+C.t2+'">高 </span><b>'+hi+'</b></span>'+
-'<span><span style="color:'+C.t2+'">低 </span><b>'+lo+'</b></span>'+
+'<span><span style="color:'+C.t2+'">高 </span><b style="color:'+C.text+'">'+hi+'</b></span>'+
+'<span><span style="color:'+C.t2+'">低 </span><b style="color:'+C.text+'">'+lo+'</b></span>'+
 '<span style="grid-column:1/3;border-top:1px solid '+C.bd+';padding-top:6px;margin-top:2px"></span>'+
-'<span style="color:'+C.t2+'">MA5</span><b style="text-align:right">'+m5v+'</b>'+
-'<span style="color:'+C.t2+'">MA10</span><b style="text-align:right">'+m10v+'</b>'+
-'<span style="color:'+C.t2+'">MA20</span><b style="text-align:right">'+m20v+'</b>'+
-'<span style="color:'+C.t2+'">MA60</span><b style="text-align:right">'+m60v+'</b>'+
+'<span style="color:'+C.t2+'">MA5</span><b style="color:'+C.text+';text-align:right">'+m5v+'</b>'+
+'<span style="color:'+C.t2+'">MA10</span><b style="color:'+C.text+';text-align:right">'+m10v+'</b>'+
+'<span style="color:'+C.t2+'">MA20</span><b style="color:'+C.text+';text-align:right">'+m20v+'</b>'+
+'<span style="color:'+C.t2+'">MA60</span><b style="color:'+C.text+';text-align:right">'+m60v+'</b>'+
 '<span style="grid-column:1/3;border-top:1px solid '+C.bd+';padding-top:6px;margin-top:2px"></span>'+
 '<span style="grid-column:1/3;font-size:11px;color:'+C.t2+'">成交量 <b style="color:'+C.text+'">'+vo+'万</b></span>'+
 '</div></div>'}},
@@ -715,12 +709,12 @@ function renderChart() {
   }else if(chartType==="macd"){
     var md=TA.macd(c);
     myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
-            tooltip:{trigger:"axis",backgroundColor:'transparent',borderColor:'transparent',textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
+            tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
         formatter:function(p){if(!p||!p[0])return'';var i=p[0].dataIndex,d=md.dif[i],e=md.dea[i],b=md.bar[i];if(d===undefined)return'';var dv=d.toFixed(2),ev=e.toFixed(2),bv=b.toFixed(2),bc=b>=0?C.up:C.dn,sg=d>e?'🟢':'🔴';return'<div style="font-family:inherit">'+
 '<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:'+C.text+'">'+dates[i]+' · MACD</div>'+
 '<div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:12px">'+
 '<span style="color:'+C.t2+'">DIF</span><b style="color:'+(d>0?C.up:C.dn)+';text-align:right">'+dv+'</b>'+
-'<span style="color:'+C.t2+'">DEA</span><b style="text-align:right">'+ev+'</b>'+
+'<span style="color:'+C.t2+'">DEA</span><b style="color:'+C.text+';text-align:right">'+ev+'</b>'+
 '<span style="color:'+C.t2+'">BAR</span><b style="color:'+bc+';text-align:right">'+bv+'</b>'+
 '<span style="grid-column:1/3;border-top:1px solid '+C.bd+';padding-top:6px"></span>'+
 '<span style="grid-column:1/3;font-size:12px;color:'+C.text+'">'+sg+' DIF'+(d>e?' > ':' < ')+'DEA，'+(d>e?'多头动能':'空头动能')+'</span>'+
@@ -739,7 +733,7 @@ function renderChart() {
   }else if(chartType==="kdj"){
     var kdj=TA.kdj(h,l,c);
     myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
-            tooltip:{trigger:"axis",backgroundColor:'transparent',borderColor:'transparent',textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
+            tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
         formatter:function(p){if(!p||!p[0])return'';var i=p[0].dataIndex,kv=kdj.k[i],dv=kdj.d[i],jv=kdj.j[i];if(kv===null)return'';var ks=kv<20?'🟢超卖':kv>80?'🔴超买':'➡️';return'<div style="font-family:inherit">'+
 '<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:'+C.text+'">'+dates[i]+' · KDJ</div>'+
 '<div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:12px">'+
@@ -765,13 +759,13 @@ function renderChart() {
   }else if(chartType==="rsi"){
     var r6=TA.rsi(c,6),r12=TA.rsi(c,12),r24=TA.rsi(c,24);
     myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
-            tooltip:{trigger:"axis",backgroundColor:'transparent',borderColor:'transparent',textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
+            tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
         formatter:function(p){if(!p||!p[0])return'';var i=p[0].dataIndex,r6v=r6[i],r12v=r12[i],r24v=r24[i];if(r6v===null)return'';var s=r6v<30?'🟢超卖':r6v>70?'🔴超买':'➡️';return'<div style="font-family:inherit">'+
 '<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:'+C.text+'">'+dates[i]+' · RSI</div>'+
 '<div style="display:grid;grid-template-columns:auto 1fr;gap:6px 12px;font-size:12px">'+
 '<span style="color:'+C.t2+'">RSI6</span><b style="color:'+(r6v<30?C.dn:r6v>70?C.up:C.text)+';text-align:right">'+r6v.toFixed(2)+'</b>'+
-'<span style="color:'+C.t2+'">RSI12</span><b style="text-align:right">'+r12v.toFixed(2)+'</b>'+
-'<span style="color:'+C.t2+'">RSI24</span><b style="text-align:right">'+r24v.toFixed(2)+'</b>'+
+'<span style="color:'+C.t2+'">RSI12</span><b style="color:'+C.text+';text-align:right">'+r12v.toFixed(2)+'</b>'+
+'<span style="color:'+C.t2+'">RSI24</span><b style="color:'+C.text+';text-align:right">'+r24v.toFixed(2)+'</b>'+
 '<span style="grid-column:1/3;border-top:1px solid '+C.bd+';padding-top:6px"></span>'+
 '<span style="grid-column:1/3;font-size:11px;color:'+C.text+'">信号: '+s+'</span>'+
 '</div></div>'}},
@@ -797,13 +791,13 @@ function renderChart() {
       var times=d2.lines.map(function(x){return x.time;}),prices=d2.lines.map(function(x){return x.price;}),vols=d2.lines.map(function(x){return x.volume;});
       var avg=d2.prevClose||prices[0],cols=prices.map(function(p){return p>=avg?"#f87171":"#34d399";});
       myChart.setOption({animation:true,animationDuration:800,animationEasing:"cubicOut",
-                tooltip:{trigger:"axis",backgroundColor:'transparent',borderColor:'transparent',textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45);background:rgba(0,0,0,0)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
+                tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},extraCssText:"backdrop-filter:blur(20px);border-radius:12px;padding:14px 18px;box-shadow:0 8px 40px rgba(0,0,0,.45);background:rgba(0,0,0,0)",axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}},
           formatter:function(p){if(!p||!p[0])return'';var i=p[0].dataIndex,pr=prices[i],av=avg,up=pr>=av,clr=up?C.up:C.dn;pct=((pr-av)/av*100).toFixed(2);return'<div style="font-family:inherit">'+
 '<div style="font-size:13px;font-weight:700;margin-bottom:8px;color:'+C.text+'">'+times[i]+'</div>'+
 '<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px 16px;font-size:12px">'+
 '<span><span style="color:'+C.t2+'">价格 </span><b style="color:'+clr+';font-size:15px">'+pr.toFixed(2)+'</b></span>'+
 '<span style="text-align:right"><span style="color:'+C.t2+'">涨幅 </span><b style="color:'+clr+'">'+(up?'+':'')+pct+'%</b></span>'+
-'<span style="grid-column:1/3"><span style="color:'+C.t2+'">均价 </span><b>'+av.toFixed(2)+'</b></span>'+
+'<span style="grid-column:1/3"><span style="color:'+C.t2+'">均价 </span><b style="color:'+C.text+'">'+av.toFixed(2)+'</b></span>'+
 '<span style="grid-column:1/3;font-size:11px;color:'+C.t2+'">量 '+(vols[i]/10000).toFixed(0)+'万</span>'+
 '</div></div>'}},
         grid:[{left:"5%",right:"5%",top:"9%",height:"56%"},{left:"5%",right:"5%",top:"73%",height:"19%"}],
