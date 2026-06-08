@@ -1,5 +1,12 @@
 {
   "dependencies": {
     "iconv-lite": "^0.7.2"
+  },
+  "name": "stock-analysis",
+  "version": "1.0.0",
+  "description": "¹ÉÆ±·ÖÎöÖúÊÖ",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
   }
 }
