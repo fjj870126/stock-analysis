@@ -677,15 +677,15 @@ function renderChart() {
   var C={bg:"rgba(20,25,50,.9)",bd:"rgba(56,189,248,.2)",text:"#e2e8f0",t2:"#8899c0",up:"#f87171",dn:"#34d399"},sl={height:8,bottom:0,borderColor:C.bd,backgroundColor:"transparent"};
   if(chartType==="kline"){
     var m5=TA.ma(c,5),m10=TA.ma(c,10),m20=TA.ma(c,20),m60=TA.ma(c,60);
-    myChart.setOption({animation:true,animationDuration:600,
-      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
+    myChart.setOption({animation:true,animationDuration:800,animationEasing:"elasticOut",
+      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}}},
       grid:[{left:"5%",right:"5%",top:"9%",height:"56%"},{left:"5%",right:"5%",top:"73%",height:"19%"}],
       xAxis:[{type:"category",data:dates,gridIndex:0},{type:"category",data:dates,gridIndex:1,axisLabel:{show:false}}],
       yAxis:[{type:"value",gridIndex:0,scale:true},{type:"value",gridIndex:1,splitLine:{show:false}}],
       series:[
-        {name:"K线",type:"candlestick",xAxisIndex:0,yAxisIndex:0,data:k.map(function(x){return[x.open,x.close,x.low,x.high];}),itemStyle:{color:C.up,color0:C.dn,borderColor:C.up,borderColor0:C.dn}},
-        {name:"MA5",type:"line",xAxisIndex:0,yAxisIndex:0,data:m5,symbol:"none",lineStyle:{color:"#ff9800",width:1.5}},
-        {name:"MA10",type:"line",xAxisIndex:0,yAxisIndex:0,data:m10,symbol:"none",lineStyle:{color:"#2196f3",width:1.5}},
+        {name:"K线",type:"candlestick",xAxisIndex:0,yAxisIndex:0,data:k.map(function(x){return[x.open,x.close,x.low,x.high];}),itemStyle:{color:C.up,color0:C.dn,borderColor:C.up,borderColor0:C.dn},emphasis:{itemStyle:{borderWidth:2,shadowBlur:10,shadowColor:"rgba(56,189,248,0.3)"}}},
+        {name:"MA5",type:"line",xAxisIndex:0,yAxisIndex:0,data:m5,symbol:"none",lineStyle:{color:"#ff9800",width:1.5},areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:"rgba(255,152,0,0.12)"},{offset:1,color:"rgba(255,152,0,0.01)"}]}},emphasis:{lineStyle:{width:2.5}}},
+        {name:"MA10",type:"line",xAxisIndex:0,yAxisIndex:0,data:m10,symbol:"none",lineStyle:{color:"#2196f3",width:1.5},areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:"rgba(33,150,243,0.1)"},{offset:1,color:"rgba(33,150,243,0.01)"}]}}},
         {name:"MA20",type:"line",xAxisIndex:0,yAxisIndex:0,data:m20,symbol:"none",lineStyle:{color:"#9c27b0",width:1.5}},
         {name:"MA60",type:"line",xAxisIndex:0,yAxisIndex:0,data:m60,symbol:"none",lineStyle:{color:"#607d8b",width:1.5}},
         {name:"量",type:"bar",xAxisIndex:1,yAxisIndex:1,data:v.map(function(x,i){return{value:x,itemStyle:{color:c[i]>=o[i]?C.up:C.dn,opacity:.4}};})}
@@ -695,28 +695,28 @@ function renderChart() {
     },true);
   }else if(chartType==="macd"){
     var md=TA.macd(c);
-    myChart.setOption({animation:true,animationDuration:400,
-      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
+    myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
+      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}}},
       grid:{left:"5%",right:"5%",top:"10%",bottom:"10%"},
       xAxis:{type:"category",data:dates},
       yAxis:{type:"value",scale:true},
       series:[
-        {name:"DIF",type:"line",data:md.dif,symbol:"none",lineStyle:{color:"#2196f3",width:2}},
+        {name:"DIF",type:"line",data:md.dif,symbol:"none",lineStyle:{color:"#2196f3",width:2},areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:"rgba(33,150,243,0.08)"},{offset:1,color:"rgba(33,150,243,0.01)"}]}}},
         {name:"DEA",type:"line",data:md.dea,symbol:"none",lineStyle:{color:"#ff9800",width:2}},
-        {name:"MACD",type:"bar",data:md.bar.map(function(v){return{value:v,itemStyle:{color:v>=0?"#f87171":"#34d399"}};})}
+        {name:"MACD",type:"bar",data:md.bar.map(function(v,i){return{value:v,itemStyle:{color:v>=0?"#f87171":"#34d399"}};})}
       ],
       legend:{data:["DIF","DEA","MACD"],top:0,left:"center",textStyle:{fontSize:10}},
       dataZoom:[{type:"inside"},{type:"slider"}]
     },true);
   }else if(chartType==="kdj"){
     var kdj=TA.kdj(h,l,c);
-    myChart.setOption({animation:true,animationDuration:400,
-      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
+    myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
+      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}}},
       grid:{left:"5%",right:"5%",top:"10%",bottom:"10%"},
       xAxis:{type:"category",data:dates},
       yAxis:{type:"value",min:0,max:100},
       series:[
-        {name:"K",type:"line",data:kdj.k,symbol:"none",lineStyle:{color:"#f87171",width:2}},
+        {name:"K",type:"line",data:kdj.k,symbol:"none",lineStyle:{color:"#f87171",width:2},areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:"rgba(248,113,113,0.08)"},{offset:1,color:"rgba(248,113,113,0.01)"}]}}},
         {name:"D",type:"line",data:kdj.d,symbol:"none",lineStyle:{color:"#2196f3",width:2}},
         {name:"J",type:"line",data:kdj.j,symbol:"none",lineStyle:{color:"#9c27b0",width:1.5,type:"dashed"}},
         {name:"超买",type:"line",data:Array(c.length).fill(80),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
@@ -727,13 +727,13 @@ function renderChart() {
     },true);
   }else if(chartType==="rsi"){
     var r6=TA.rsi(c,6),r12=TA.rsi(c,12),r24=TA.rsi(c,24);
-    myChart.setOption({animation:true,animationDuration:400,
-      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
+    myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
+      tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}}},
       grid:{left:"5%",right:"5%",top:"10%",bottom:"10%"},
       xAxis:{type:"category",data:dates},
       yAxis:{type:"value",min:0,max:100},
       series:[
-        {name:"RSI6",type:"line",data:r6,symbol:"none",lineStyle:{color:"#f87171",width:2}},
+        {name:"RSI6",type:"line",data:r6,symbol:"none",lineStyle:{color:"#f87171",width:2},areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:"rgba(248,113,113,0.08)"},{offset:1,color:"rgba(248,113,113,0.01)"}]}}},
         {name:"RSI12",type:"line",data:r12,symbol:"none",lineStyle:{color:"#ff9800",width:1.5}},
         {name:"RSI24",type:"line",data:r24,symbol:"none",lineStyle:{color:"#9c27b0",width:1.5,type:"dashed"}},
         {name:"超买",type:"line",data:Array(c.length).fill(70),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
@@ -750,13 +750,13 @@ function renderChart() {
       var d2=res.data;if(!d2||!d2.lines)return;
       var times=d2.lines.map(function(x){return x.time;}),prices=d2.lines.map(function(x){return x.price;}),vols=d2.lines.map(function(x){return x.volume;});
       var avg=d2.prevClose||prices[0],cols=prices.map(function(p){return p>=avg?"#f87171":"#34d399";});
-      myChart.setOption({animation:true,animationDuration:600,
-        tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text}},
+      myChart.setOption({animation:true,animationDuration:800,animationEasing:"cubicOut",
+        tooltip:{trigger:"axis",backgroundColor:C.bg,borderColor:C.bd,textStyle:{color:C.text},axisPointer:{type:"cross",crossStyle:{color:C.t2,width:1,type:"dashed"}}},
         grid:[{left:"5%",right:"5%",top:"9%",height:"56%"},{left:"5%",right:"5%",top:"73%",height:"19%"}],
         xAxis:[{type:"category",data:times,gridIndex:0},{type:"category",data:times,gridIndex:1,axisLabel:{show:false}}],
         yAxis:[{type:"value",gridIndex:0,scale:true},{type:"value",gridIndex:1,splitLine:{show:false}}],
         series:[
-          {name:"价格",type:"line",xAxisIndex:0,yAxisIndex:0,data:prices,symbol:"none",smooth:true,lineStyle:{width:2,color:"#38bdf8"},areaStyle:{color:"rgba(56,189,248,0.1)"}},
+          {name:"价格",type:"line",xAxisIndex:0,yAxisIndex:0,data:prices,symbol:"none",smooth:true,lineStyle:{width:2,color:"#38bdf8"},areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:"rgba(56,189,248,0.25)"},{offset:1,color:"rgba(56,189,248,0.02)"}]}},emphasis:{lineStyle:{width:3}}},
           {name:"均价",type:"line",xAxisIndex:0,yAxisIndex:0,data:Array(prices.length).fill(avg),symbol:"none",lineStyle:{width:1,color:"#fbbf24",type:"dashed"}},
           {name:"成交量",type:"bar",xAxisIndex:1,yAxisIndex:1,data:vols.map(function(v,i){return{value:v,itemStyle:{color:cols[i],opacity:.4}};})}
         ],
