@@ -27,48 +27,39 @@ async function handleIndexes(req, res) {
   try {
     const codes = ["sh000001", "sz399001", "sz399006"];
     const names = ["上证指数", "深证成指", "创业板指"];
-    
-    // 同时请求新浪和腾讯，哪个先返回用哪个
-    const results = await Promise.allSettled([
-      fetchGBK(`https://hq.sinajs.cn/list=sh000001,sz399001,sz399006`, 10000),
-      fetchGBK(`https://qt.gtimg.cn/q=sh000001,sz399001,sz399006`, 10000)
-    ]);
-    
-    let list = [];
-    
-    // 优先用新浪数据
-    if (results[0].status === "fulfilled" && results[0].value.ok) {
-      const texts = results[0].value.text.split(';');
-      for (let i = 0; i < codes.length && i < texts.length; i++) {
-        const q = parseSinaQuote(codes[i], texts[i]);
-        if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
-      }
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
     }
-    
-    // 新浪失败则用腾讯数据
-    if (list.length === 0 && results[1].status === "fulfilled" && results[1].value.ok) {
-      const parts = results[1].value.text.split(';');
-      for (let i = 0; i < codes.length && i < parts.length; i++) {
-        const m = parts[i].match(/"([^"]+)"/);
-        if (m) {
-          const t = m[1].split('~');
-          const price = parseFloat(t[3]) || 0;
-          const prevClose = parseFloat(t[4]) || 0;
-          const changeAmt = Math.round((price - prevClose) * 100) / 100;
-          const changePct = prevClose ? Math.round(((price - prevClose) / prevClose) * 10000) / 100 : 0;
-          list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price, changePct, changeAmt });
-        }
-      }
-    }
-    
     setCache("indexes", list);
     sendJSON(res, 200, { data: list });
   } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
 }
+
 // ===================================================================
 // 工具函数
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 
@@ -156,11 +147,45 @@ function parseSinaQuote(code, text) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // 板块数据
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 const SECTORS = [
@@ -289,11 +314,45 @@ const SECTORS = [
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 资金流向
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleMoneyFlow(req, res) {
@@ -324,11 +383,45 @@ async function handleMoneyFlow(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 搜索
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleSearch(req, res) {
@@ -343,11 +436,45 @@ async function handleSearch(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 实时行情
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleQuote(req, res) {
@@ -432,11 +559,45 @@ async function handleQuote(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: K线
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleKline(req, res) {
@@ -457,11 +618,45 @@ async function handleKline(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 分时数据
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleTimeline(req, res) {
@@ -488,11 +683,45 @@ async function handleTimeline(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 板块列表（含股票）
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleSectors(req, res) {
@@ -502,11 +731,45 @@ async function handleSectors(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 板块股票实时行情
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleSectorQuotes(req, res) {
@@ -535,11 +798,45 @@ async function handleSectorQuotes(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 涨跌排行榜
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleRanking(req, res) {
@@ -563,11 +860,45 @@ async function handleRanking(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 智能推荐（今日买入/卖出/持有）
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleRecommend(req, res) {
@@ -644,11 +975,45 @@ async function handleRecommend(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 财经新闻
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleNews(req, res) {
@@ -670,11 +1035,45 @@ async function handleNews(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // API: 板块轮动热力
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 async function handleSectorHeat(req, res) {
@@ -701,11 +1100,45 @@ async function handleSectorHeat(req, res) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // 静态文件服务
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'application/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.png': 'image/png', '.jpg': 'image/jpeg', '.svg': 'image/svg+xml', '.ico': 'image/x-icon' };
@@ -720,11 +1153,45 @@ async function serveStatic(res, fp) {
 
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 // 入口
 // API: 大盘指数
 // =====
+async function handleIndexes(req, res) {
+  const cached = getCache("indexes", 15000);
+  if (cached) return sendJSON(res, 200, { data: cached });
+  try {
+    const codes = ["sh000001", "sz399001", "sz399006"];
+    const names = ["上证指数", "深证成指", "创业板指"];
+    const results = await Promise.allSettled(codes.map(c => fetchGBK(`https://hq.sinajs.cn/list=`, 6000)));
+    const list = [];
+    for (let i = 0; i < codes.length; i++) {
+      if (results[i].status !== "fulfilled" || !results[i].value.ok) continue;
+      const q = parseSinaQuote(codes[i], results[i].value.text);
+      if (q) list.push({ name: names[i], code: codes[i].replace(/[a-z]/g,""), price: q.price, changePct: q.changePct, changeAmt: q.changeAmt });
+    }
+    setCache("indexes", list);
+    sendJSON(res, 200, { data: list });
+  } catch (e) { sendError(res, 500, "获取指数失败: " + e.message); }
+}
 
 // ===================================================================
 const server = http.createServer((req, res) => {
