@@ -344,6 +344,11 @@ body, .header, .stock-card, .sector-tab, .index-item, .overview, .advice, .chart
 .filter-bar{overflow:hidden;max-height:0;opacity:0;transition:all .35s cubic-bezier(.22,1,.36,1);margin-bottom:0}
 .filter-bar.active{max-height:100px;opacity:1;margin-bottom:8px}
 
+
+
+
+.dir-up{display:none}.dir-left{display:inline}
+@media(max-width:768px){.dir-left{display:none}.dir-up{display:inline}}
 </style>
 </head>
 <body style="animation:fadeIn .6s ease both">
@@ -549,7 +554,7 @@ body, .header, .stock-card, .sector-tab, .index-item, .overview, .advice, .chart
   <div style="text-align:center;padding:40px 20px">
     <div style="font-size:56px;margin-bottom:12px;opacity:.8">📈</div>
     <div style="font-size:20px;font-weight:700;background:linear-gradient(135deg,var(--acc),var(--acc2));-webkit-background-clip:text;-webkit-text-fill-color:transparent">股票分析助手</div>
-    <div style="font-size:13px;color:var(--t2);margin-top:10px">点击左侧股票卡片查看详细分析</div>
+    <div style="font-size:13px;color:var(--t2);margin-top:10px">点击<span class="dir-left">左侧</span><span class="dir-up">上方</span>股票卡片查看详细分析</div>
 
   </div>
 </div>
