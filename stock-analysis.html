@@ -880,9 +880,9 @@ async function loadStock(code) {
     const cs = document.getElementById('chartSection');
     cs.style.display = '';
     cs.classList.add('active');
-    if (!myChart) initChart();
+    if (!myChart){try{initChart();}catch(e){console.warn("init:",e);}}
     setTimeout(() => myChart?.resize(), 50);
-    renderChart();
+    try{renderChart();}catch(e){console.warn("chart:",e);}
     showLoading(false);
     // 滚动到详情感应区
     document.getElementById('overview').scrollIntoView({ behavior: 'smooth', block: 'start' });
