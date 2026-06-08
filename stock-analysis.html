@@ -1141,23 +1141,21 @@ document.getElementById('guideBtn')?.addEventListener('click', () => {
 
 /* ===== 主题切换 ===== */
 (function initTheme() {
-  const themes = ['light', 'dark', 'colorful'];
-  const icons = { light: '☀️', dark: '🌙', colorful: '✨' };
-  let current = localStorage.getItem('stock-theme') || 'light';
-  document.documentElement.setAttribute('data-theme', current);
-  const btn = document.getElementById('themeBtn');
-  if (btn) {
-    btn.textContent = icons[current] || '🌙';
-    btn.addEventListener('click', () => {
-      const idx = themes.indexOf(current);
-      current = themes[(idx + 1) % themes.length];
-      document.documentElement.setAttribute('data-theme', current);
-      localStorage.setItem('stock-theme', current);
-      btn.textContent = icons[current];
-      // 通知 ECharts 重绘
-      setTimeout(() => { if (myChart) myChart.resize(); }, 100);
+  var current = localStorage.getItem('stock-theme') || 'dark';
+  function applyTheme(name) {
+    current = name;
+    document.documentElement.setAttribute('data-theme', name);
+    localStorage.setItem('stock-theme', name);
+    document.querySelectorAll('.swatch').forEach(function(el){
+      el.classList.toggle('active', el.dataset.theme === name);
     });
+    setTimeout(function(){ if (myChart) myChart.resize(); }, 100);
   }
+  document.getElementById('themeSwatches')?.addEventListener('click', function(e) {
+    var swatch = e.target.closest('.swatch');
+    if (swatch) applyTheme(swatch.dataset.theme);
+  });
+  applyTheme(current);
 })();
 
 /* ===== 启动 ===== */
