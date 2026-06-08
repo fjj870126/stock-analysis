@@ -63,25 +63,39 @@ async function handleIndexes(req, res) {
 
 // ===================================================================
 
-async function fetchWithTimeout(url, timeoutMs = 8000) {
+async function fetchWithTimeout(url, timeoutMs = 12000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0', 'Referer': 'https://finance.sina.com.cn/' },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://finance.sina.com.cn/',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Accept-Encoding': 'gzip, deflate',
+        'Connection': 'keep-alive',
+      },
     });
     return { ok: res.ok, status: res.status, text: await res.text() };
   } finally { clearTimeout(timer); }
 }
 
-async function fetchGBK(url, timeoutMs = 8000) {
+async function fetchGBK(url, timeoutMs = 12000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const res = await fetch(url, {
       signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0', 'Referer': 'https://finance.sina.com.cn/' },
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Referer': 'https://finance.sina.com.cn/',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en;q=0.8',
+        'Accept-Encoding': 'gzip, deflate',
+        'Connection': 'keep-alive',
+      },
     });
     const text = iconv.decode(Buffer.from(await res.arrayBuffer()), 'gbk');
     return { ok: res.ok, status: res.status, text };
@@ -472,14 +486,44 @@ async function handleQuote(req, res) {
       fetchGBK(`https://hq.sinajs.cn/list=${prefix}${code}`),
       fetchGBK(`https://qt.gtimg.cn/q=${prefix}${code}`)
     ]);
-    if (sinaR.status !== 'fulfilled' || !sinaR.value.ok) return sendError(res, 502, '行情服务不可用');
-    const m = sinaR.value.text.match(/"([^"]+)"/);
-    if (!m) return sendError(res, 502, '数据解析失败');
-    const f = m[1].split(',');
-    const prevClose = parseFloat(f[2]) || 0;
-    const price = parseFloat(f[3]) || 0;
+    // 获取行情 - 优先用新浪，失败则降级到腾讯
+    let priceData = null;
+    if (sinaR.status === 'fulfilled' && sinaR.value.ok) {
+      const m = sinaR.value.text.match(/"([^"]+)"/);
+      if (m) {
+        const f = m[1].split(',');
+        priceData = {
+          name: f[0] || code,
+          price: parseFloat(f[3]) || 0,
+          open: parseFloat(f[1]) || 0,
+          high: parseFloat(f[4]) || 0,
+          low: parseFloat(f[5]) || 0,
+          prevClose: parseFloat(f[2]) || 0,
+          volume: parseFloat(f[8]) || 0,
+          amount: parseFloat(f[9]) || 0,
+        };
+      }
+    }
+    // 新浪失败，尝试用腾讯数据
+    if (!priceData && txR.status === 'fulfilled' && txR.value.ok) {
+      const tm = txR.value.text.match(/"([^"]+)"/);
+      if (tm) {
+        const t = tm[1].split('~');
+        priceData = {
+          name: t[1] || code,
+          price: parseFloat(t[3]) || 0,
+          open: parseFloat(t[5]) || 0,
+          high: parseFloat(t[33]) || 0,
+          low: parseFloat(t[34]) || 0,
+          prevClose: parseFloat(t[4]) || 0,
+          volume: parseFloat(t[6]) || 0,
+          amount: parseFloat(t[37]) || 0,
+        };
+      }
+    }
+    if (!priceData) return sendError(res, 502, '行情服务不可用');
 
-    // 从腾讯接口补充数据
+    // 从腾讯接口补充扩展数据
     let pe = 0, turnover = 0, amplitude = 0, totalMv = 0, circMv = 0;
     if (txR.status === 'fulfilled' && txR.value.ok) {
       const tm = txR.value.text.match(/"([^"]+)"/);
@@ -493,18 +537,20 @@ async function handleQuote(req, res) {
       }
     }
 
+    const p = priceData;
+    const changeAmt = Math.round((p.price - p.prevClose) * 100) / 100;
+    const changePct = p.prevClose ? Math.round(((p.price - p.prevClose) / p.prevClose) * 10000) / 100 : 0;
     sendJSON(res, 200, {
       data: {
-        code, name: f[0] || code,
-        price: Math.round(price * 100) / 100,
-        open: Math.round(parseFloat(f[1]) * 100) / 100 || 0,
-        high: Math.round(parseFloat(f[4]) * 100) / 100 || 0,
-        low: Math.round(parseFloat(f[5]) * 100) / 100 || 0,
-        prevClose: Math.round(prevClose * 100) / 100,
-        changeAmt: Math.round((price - prevClose) * 100) / 100,
-        changePct: Math.round(((price - prevClose) / prevClose) * 10000) / 100,
-        volume: parseFloat(f[8]) || 0,
-        amount: parseFloat(f[9]) || 0,
+        code, name: p.name,
+        price: Math.round(p.price * 100) / 100,
+        open: Math.round(p.open * 100) / 100,
+        high: Math.round(p.high * 100) / 100,
+        low: Math.round(p.low * 100) / 100,
+        prevClose: Math.round(p.prevClose * 100) / 100,
+        changeAmt, changePct,
+        volume: p.volume || 0,
+        amount: p.amount || 0,
         turnover, pe, amplitude, totalMv, circMv,
       }
     });
