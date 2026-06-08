@@ -85,6 +85,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;b
 .error-box{background:var(--bbg);border:1px solid var(--bc);border-radius:10px;padding:14px;color:var(--bc);text-align:center;display:none;margin-bottom:14px;font-size:12px}
 .error-box.active{display:block}
 
+
+/* 自定义提示框 */
+.tooltip-box{position:fixed;max-width:280px;padding:8px 12px;border-radius:8px;font-size:11px;line-height:1.5;z-index:9999;pointer-events:none;opacity:0;transition:opacity .18s ease;background:rgba(20,25,50,.92);border:1px solid rgba(56,189,248,.25);box-shadow:0 4px 20px rgba(0,0,0,.4);backdrop-filter:blur(12px);color:#e2e8f0}
+.tooltip-box.show{opacity:1}
+
+/* 自定义提示框 */
+.tooltip-box{position:fixed;max-width:280px;padding:8px 12px;border-radius:8px;font-size:11px;line-height:1.5;z-index:9999;pointer-events:none;opacity:0;transition:opacity .18s ease;background:rgba(20,25,50,.92);border:1px solid rgba(56,189,248,.25);box-shadow:0 4px 20px rgba(0,0,0,.4);backdrop-filter:blur(12px);color:#e2e8f0}
+.tooltip-box.show{opacity:1}
 /* 概览 */
 .welcome{display:flex;align-items:center;justify-content:center;min-height:300px}
 .overview,.advice,.chart-section,.indicators{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:16px 20px;margin-bottom:12px;box-shadow:var(--shadow);backdrop-filter:blur(16px)}
@@ -548,147 +556,135 @@ function switchChart(t) {
 }
 function renderChart() {
   if (!myChart || !cached.length) return;
-  const k = cached, dates = k.map(x => x.date), c = k.map(x => x.close), h = k.map(x => x.high), l = k.map(x => x.low), o = k.map(x => x.open), v = k.map(x => x.volume);
-
-  if (chartType === 'kline') {
-    const ma5 = TA.ma(c, 5), ma10 = TA.ma(c, 10), ma20 = TA.ma(c, 20), ma60 = TA.ma(c, 60);
-    myChart.setOption({
-      animation: true, animationDuration: 600, animationEasing: 'cubicOut',
-      tooltip: {
-        trigger: 'axis', axisPointer: { type: 'cross', label: { backgroundColor: '#1a1e30', color: '#e2e8f0', borderColor: 'rgba(56,189,248,.3)', borderWidth: 1 } },
-        backgroundColor: 'rgba(20,25,50,.9)', borderColor: 'rgba(56,189,248,.3)', borderWidth: 1,
-        textStyle: { color: '#e2e8f0', fontSize: 11 },
-        formatter: function(params) {
-          const p = params[0];
-          if (!p) return '';
-          const d = p.data;
-          const idx = p.dataIndex;
-          const open = Array.isArray(d) ? d[0] : 0;
-          const close = Array.isArray(d) ? d[1] : 0;
-          const low = Array.isArray(d) ? d[2] : 0;
-          const high = Array.isArray(d) ? d[3] : 0;
-          const chg = close - open;
-          const pct = open ? (chg / open * 100).toFixed(2) : '0.00';
-          const vol = v[idx] || 0;
-          const date = dates[idx] || '';
-          const fmt = n => n.toFixed(2);
-          let html = `<b style="font-size:12px">${date}</b><br>`;
-          html += `开: ${fmt(open)} | 收: <b>${fmt(close)}</b><br>`;
-          html += `高: ${fmt(high)} | 低: ${fmt(low)}<br>`;
-          html += `涨幅: <b style="color:${chg>=0?'var(--red)':'var(--green)'}">${chg>=0?'+':''}${pct}%</b>`;
-          html += ` | 量: ${(vol/10000).toFixed(0)}万<br>`;
-          // 显示MA值
-          const vals = [ma5[idx], ma10[idx], ma20[idx], ma60[idx]];
-          const names = ['MA5','MA10','MA20','MA60'];
-          const colors = ['#ff9800','#2196f3','#9c27b0','#607d8b'];
-          let hasMa = false;
-          vals.forEach((v, i) => {
-            if (v !== null && v !== undefined) {
-              html += `<span style="color:${colors[i]}">${names[i]}:${v.toFixed(1)} </span>`;
-              hasMa = true;
-            }
-          });
-          if (hasMa) html += '<br>';
-          return html;
-        }
+  var km = cached, dates = km.map(function(x){return x.date;}), c = km.map(function(x){return x.close;}), h = km.map(function(x){return x.high;}), l = km.map(function(x){return x.low;}), o = km.map(function(x){return x.open;}), v = km.map(function(x){return x.volume;});
+  var C0={bg:"rgba(20,25,50,.9)",bd:"rgba(56,189,248,.2)",text:"#e2e8f0",t2:"#8899c0",up:"#f87171",dn:"#34d399"};
+  var sd={height:8,bottom:0,borderColor:C0.bd,backgroundColor:"transparent",dataBackground:{lineStyle:{color:C0.t2,width:.5},areaStyle:{color:"rgba(100,120,160,.08)"}},selectedDataBackground:{lineStyle:{color:"#38bdf8",width:1},areaStyle:{color:"rgba(56,189,248,.15)"}},handleStyle:{color:"#38bdf8"},textStyle:{color:C0.t2,fontSize:9}};
+  if(chartType==="kline"){
+    var m5=TA.ma(c,5),m10=TA.ma(c,10),m20=TA.ma(c,20),m60=TA.ma(c,60);
+    myChart.setOption({animation:true,animationDuration:800,animationEasing:"elasticOut",
+      tooltip:{trigger:"axis",axisPointer:{type:"cross",label:{backgroundColor:"#1a1e30",color:"#e2e8f0"}},backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12},
+        formatter:function(p){if(!p||!p[0])return"";var i=p[0].dataIndex,dp=p[0].data;var op=Array.isArray(dp)?dp[0]:0,cl=Array.isArray(dp)?dp[1]:0,lo=Array.isArray(dp)?dp[2]:0,hi=Array.isArray(dp)?dp[3]:0;var ch=cl-op,pt=op?(ch/op*100).toFixed(2):"0",vl=v[i]||0,dt=dates[i]||"";return"<b style=\"font-size:13px;color:#fbbf24\">"+dt+"</b><br/>\u5f00 "+op.toFixed(2)+" | \u6536 <b style=\"color:"+(ch>=0?C0.up:C0.dn)+"\">"+cl.toFixed(2)+"</b><br/>\u9ad8 "+hi.toFixed(2)+" | \u4f4e "+lo.toFixed(2)+"<br/>\u6da8\u5e45 <b style=\"color:"+(ch>=0?C0.up:C0.dn)+"\">"+(ch>=0?"+":"")+pt+"%</b> | \u91cf "+(vl/10000).toFixed(0)+"\u4e07";}
       },
-      grid: [{ left: '6%', right: '6%', top: '6%', height: '60%' }, { left: '6%', right: '6%', top: '74%', height: '18%' }],
-      xAxis: [{ type: 'category', data: dates, gridIndex: 0, axisLine: { lineStyle: { color: 'var(--bd)' } }, axisLabel: { fontSize: 9, color: '#8892b0' } }, { type: 'category', data: dates, gridIndex: 1, axisLabel: { show: false } }],
-      yAxis: [{ type: 'value', gridIndex: 0, scale: true, splitLine: { lineStyle: { color: 'var(--bd)', opacity: .3 } }, axisLabel: { fontSize: 10, color: '#8892b0' } }, { type: 'value', gridIndex: 1, splitLine: { show: false }, axisLabel: { fontSize: 9, color: '#8892b0' } }],
-      series: [
-        { name: 'K线', type: 'candlestick', xAxisIndex: 0, yAxisIndex: 0, data: k.map(x => [x.open, x.close, x.low, x.high]),
-          itemStyle: { color: '#f87171', color0: '#34d399', borderColor: '#f87171', borderColor0: '#34d399' },
-          animationDelay: function(idx) { return idx * 3; } },
-        { name: 'MA5', type: 'line', xAxisIndex: 0, yAxisIndex: 0, data: ma5, smooth: true, symbol: 'none', connectNulls: true, lineStyle: { width: 1.5, color: '#ff9800' }, animationDelay: function(idx) { return idx * 3 + 50; } },
-        { name: 'MA10', type: 'line', xAxisIndex: 0, yAxisIndex: 0, data: ma10, smooth: true, symbol: 'none', connectNulls: true, lineStyle: { width: 1.5, color: '#2196f3' }, animationDelay: function(idx) { return idx * 3 + 100; } },
-        { name: 'MA20', type: 'line', xAxisIndex: 0, yAxisIndex: 0, data: ma20, smooth: true, symbol: 'none', connectNulls: true, lineStyle: { width: 1.5, color: '#9c27b0' }, animationDelay: function(idx) { return idx * 3 + 150; } },
-        { name: 'MA60', type: 'line', xAxisIndex: 0, yAxisIndex: 0, data: ma60, smooth: true, symbol: 'none', connectNulls: true, lineStyle: { width: 1.5, color: '#607d8b' }, animationDelay: function(idx) { return idx * 3 + 200; } },
-        { name: '量', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: v.map((x, i) => ({ value: x, itemStyle: { color: c[i] >= o[i] ? '#f87171' : '#34d399', opacity: .5 } })) }
+      grid:[{left:"5%",right:"5%",top:"9%",height:"56%"},{left:"5%",right:"5%",top:"73%",height:"19%"}],
+      xAxis:[{type:"category",data:dates,gridIndex:0,axisLine:{lineStyle:{color:C0.bd}},axisLabel:{fontSize:10,color:C0.t2,hideOverlap:true}},{type:"category",data:dates,gridIndex:1,axisLabel:{show:false}}],
+      yAxis:[{type:"value",gridIndex:0,scale:true,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},{type:"value",gridIndex:1,splitLine:{show:false},axisLabel:{fontSize:10,color:C0.t2}}],
+      series:[
+        {name:"K\u7ebf",type:"candlestick",xAxisIndex:0,yAxisIndex:0,data:km.map(function(x){return[x.open,x.close,x.low,x.high];}),itemStyle:{color:C0.up,color0:C0.dn,borderColor:C0.up,borderColor0:C0.dn,shadowBlur:6,shadowColor:"rgba(0,0,0,.4)"},animationDelay:function(idx){return idx*2;}},
+        {name:"MA5",type:"line",xAxisIndex:0,yAxisIndex:0,data:m5,smooth:true,symbol:"none",connectNulls:true,lineStyle:{width:2,color:"#ff9800"},endLabel:{show:true,formatter:"MA5",color:"#ff9800",fontSize:11},animationDelay:function(idx){return idx*2+30;}},
+        {name:"MA10",type:"line",xAxisIndex:0,yAxisIndex:0,data:m10,smooth:true,symbol:"none",connectNulls:true,lineStyle:{width:2,color:"#2196f3"},endLabel:{show:true,formatter:"MA10",color:"#2196f3",fontSize:11},animationDelay:function(idx){return idx*2+60;}},
+        {name:"MA20",type:"line",xAxisIndex:0,yAxisIndex:0,data:m20,smooth:true,symbol:"none",connectNulls:true,lineStyle:{width:2,color:"#9c27b0"},endLabel:{show:true,formatter:"MA20",color:"#9c27b0",fontSize:11},animationDelay:function(idx){return idx*2+90;}},
+        {name:"MA60",type:"line",xAxisIndex:0,yAxisIndex:0,data:m60,smooth:true,symbol:"none",connectNulls:true,lineStyle:{width:1.5,color:"#607d8b"},endLabel:{show:true,formatter:"MA60",color:"#607d8b",fontSize:11},animationDelay:function(idx){return idx*2+120;}},
+        {name:"\u91cf",type:"bar",xAxisIndex:1,yAxisIndex:1,data:v.map(function(x,i){return{value:x,itemStyle:{color:c[i]>=o[i]?C0.up:C0.dn,opacity:.4,borderRadius:[2,2,0,0]}};})}
       ],
-      legend: { data: ['MA5', 'MA10', 'MA20', 'MA60'], top: 0, left: 'center', textStyle: { fontSize: 10, color: 'var(--t2)' } },
-      dataZoom: [{ type: 'inside', xAxisIndex: [0, 1], start: 0, end: 100 }, { type: 'slider', xAxisIndex: [0, 1], height: 10, bottom: 0, borderColor: 'var(--bd)', backgroundColor: 'var(--card)', dataBackground: { lineStyle: { color: 'var(--t3)' }, areaStyle: { color: 'var(--t3)' } }, selectedDataBackground: { lineStyle: { color: 'var(--acc)' }, areaStyle: { color: 'var(--acc)' } }, handleStyle: { color: 'var(--acc)' }, textStyle: { color: 'var(--t2)', fontSize: 9 } }]
-    }, true);
-  } else if (chartType === 'macd') {
-    const macd = TA.macd(c);
-    myChart.setOption({
-      tooltip: { trigger: 'axis', backgroundColor: 'rgba(20,25,50,.9)', borderColor: 'rgba(56,189,248,.3)', borderWidth: 1, textStyle: { color: '#e2e8f0', fontSize: 11 } }, grid: { left: '6%', right: '6%', top: '8%', bottom: '8%' },
-      xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 9, color: 'var(--t2)' } },
-      yAxis: { type: 'value', scale: true, axisLabel: { fontSize: 10, color: 'var(--t2)' }, splitLine: { lineStyle: { color: 'var(--bd)', opacity: .3 } } },
-      series: [
-        { name: 'DIF', type: 'line', data: macd.dif, symbol: 'none', lineStyle: { color: '#2196f3', width: 2 } },
-        { name: 'DEA', type: 'line', data: macd.dea, symbol: 'none', lineStyle: { color: '#ff9800', width: 2 } },
-        { name: 'MACD', type: 'bar', data: macd.bar.map(v => ({ value: v, itemStyle: { color: v >= 0 ? '#e74c3c' : '#27ae60', opacity: .6 } })) }
+      legend:{data:["MA5","MA10","MA20","MA60"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
+      dataZoom:[{type:"inside",xAxisIndex:[0,1],start:0,end:100},{type:"slider",xAxisIndex:[0,1],start:0,end:100}]
+    },true);
+  }else if(chartType==="macd"){
+    var md=TA.macd(c);
+    myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
+      tooltip:{trigger:"axis",backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12}},
+      grid:{left:"5%",right:"5%",top:"10%",bottom:"10%"},
+      xAxis:{type:"category",data:dates,axisLabel:{fontSize:10,color:C0.t2,hideOverlap:true},axisLine:{lineStyle:{color:C0.bd}}},
+      yAxis:{type:"value",scale:true,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},
+      series:[
+        {name:"DIF",type:"line",data:md.dif,symbol:"none",smooth:true,lineStyle:{color:"#2196f3",width:2.5},areaStyle:{color:"rgba(33,150,243,.06)"}},
+        {name:"DEA",type:"line",data:md.dea,symbol:"none",smooth:true,lineStyle:{color:"#ff9800",width:2.5}},
+        {name:"MACD",type:"bar",data:md.bar.map(function(v){return{value:v,itemStyle:{color:v>=0?"#f87171":"#34d399",opacity:.7,borderRadius:[3,3,0,0]}};})}
       ],
-      legend: { data: ['DIF', 'DEA', 'MACD'], top: 0, left: 'center', textStyle: { fontSize: 10 } },
-      dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 12, bottom: 0 }]
-    }, true);
-  } else if (chartType === 'kdj') {
-    const kdj = TA.kdj(h, l, c);
-    myChart.setOption({
-      tooltip: { trigger: 'axis', backgroundColor: 'rgba(20,25,50,.9)', borderColor: 'rgba(56,189,248,.3)', borderWidth: 1, textStyle: { color: '#e2e8f0', fontSize: 11 } }, grid: { left: '6%', right: '6%', top: '8%', bottom: '8%' },
-      xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 9, color: 'var(--t2)' } },
-      yAxis: { type: 'value', min: 0, max: 100, axisLabel: { fontSize: 10, color: 'var(--t2)' }, splitLine: { lineStyle: { color: 'var(--bd)', opacity: .3 } } },
-      series: [
-        { name: 'K', type: 'line', data: kdj.k, symbol: 'none', lineStyle: { color: '#e74c3c', width: 2 } },
-        { name: 'D', type: 'line', data: kdj.d, symbol: 'none', lineStyle: { color: '#2196f3', width: 2 } },
-        { name: 'J', type: 'line', data: kdj.j, symbol: 'none', lineStyle: { color: '#9c27b0', width: 1.5, type: 'dashed' } },
-        { name: '超买', type: 'line', data: Array(c.length).fill(80), symbol: 'none', lineStyle: { color: '#e74c3c', width: 1, type: 'dotted' } },
-        { name: '超卖', type: 'line', data: Array(c.length).fill(20), symbol: 'none', lineStyle: { color: '#27ae60', width: 1, type: 'dotted' } }
+      legend:{data:["DIF","DEA","MACD"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
+      dataZoom:[{type:"inside",start:0,end:100},{type:"slider",start:0,end:100}]
+    },true);
+  }else if(chartType==="kdj"){
+    var kdj=TA.kdj(h,l,c);
+    myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
+      tooltip:{trigger:"axis",backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12}},
+      grid:{left:"5%",right:"5%",top:"10%",bottom:"10%"},
+      xAxis:{type:"category",data:dates,axisLabel:{fontSize:10,color:C0.t2,hideOverlap:true},axisLine:{lineStyle:{color:C0.bd}}},
+      yAxis:{type:"value",min:0,max:100,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},
+      series:[
+        {name:"K",type:"line",data:kdj.k,symbol:"none",smooth:true,lineStyle:{color:"#f87171",width:2.5}},
+        {name:"D",type:"line",data:kdj.d,symbol:"none",smooth:true,lineStyle:{color:"#2196f3",width:2.5}},
+        {name:"J",type:"line",data:kdj.j,symbol:"none",smooth:true,lineStyle:{color:"#9c27b0",width:1.5,type:"dashed"}},
+        {name:"\u8d85\u4e70",type:"line",data:Array(c.length).fill(80),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
+        {name:"\u8d85\u5356",type:"line",data:Array(c.length).fill(20),symbol:"none",lineStyle:{color:"#34d399",width:1,type:"dotted"}}
       ],
-      legend: { data: ['K', 'D', 'J'], top: 0, left: 'center', textStyle: { fontSize: 10 } },
-      dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 12, bottom: 0 }]
-    }, true);
-  } else if (chartType === 'rsi') {
-    const r6 = TA.rsi(c, 6), r12 = TA.rsi(c, 12), r24 = TA.rsi(c, 24);
-    myChart.setOption({
-      tooltip: { trigger: 'axis', backgroundColor: 'rgba(20,25,50,.9)', borderColor: 'rgba(56,189,248,.3)', borderWidth: 1, textStyle: { color: '#e2e8f0', fontSize: 11 } }, grid: { left: '6%', right: '6%', top: '8%', bottom: '8%' },
-      xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 9, color: 'var(--t2)' } },
-      yAxis: { type: 'value', min: 0, max: 100, axisLabel: { fontSize: 10, color: 'var(--t2)' }, splitLine: { lineStyle: { color: 'var(--bd)', opacity: .3 } } },
-      series: [
-        { name: 'RSI6', type: 'line', data: r6, symbol: 'none', lineStyle: { color: '#e74c3c', width: 2 } },
-        { name: 'RSI12', type: 'line', data: r12, symbol: 'none', lineStyle: { color: '#ff9800', width: 1.5 } },
-        { name: 'RSI24', type: 'line', data: r24, symbol: 'none', lineStyle: { color: '#9c27b0', width: 1.5, type: 'dashed' } },
-        { name: '超买', type: 'line', data: Array(c.length).fill(70), symbol: 'none', lineStyle: { color: '#e74c3c', width: 1, type: 'dotted' } },
-        { name: '超卖', type: 'line', data: Array(c.length).fill(30), symbol: 'none', lineStyle: { color: '#27ae60', width: 1, type: 'dotted' } }
+      legend:{data:["K","D","J"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
+      dataZoom:[{type:"inside",start:0,end:100},{type:"slider",start:0,end:100}]
+    },true);
+  }else if(chartType==="rsi"){
+    var r6=TA.rsi(c,6),r12=TA.rsi(c,12),r24=TA.rsi(c,24);
+    myChart.setOption({animation:true,animationDuration:600,animationEasing:"cubicOut",
+      tooltip:{trigger:"axis",backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12}},
+      grid:{left:"5%",right:"5%",top:"10%",bottom:"10%"},
+      xAxis:{type:"category",data:dates,axisLabel:{fontSize:10,color:C0.t2,hideOverlap:true},axisLine:{lineStyle:{color:C0.bd}}},
+      yAxis:{type:"value",min:0,max:100,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},
+      series:[
+        {name:"RSI6",type:"line",data:r6,symbol:"none",smooth:true,lineStyle:{color:"#f87171",width:2.5}},
+        {name:"RSI12",type:"line",data:r12,symbol:"none",smooth:true,lineStyle:{color:"#ff9800",width:2}},
+        {name:"RSI24",type:"line",data:r24,symbol:"none",smooth:true,lineStyle:{color:"#9c27b0",width:1.5,type:"dashed"}},
+        {name:"\u8d85\u4e70",type:"line",data:Array(c.length).fill(70),symbol:"none",lineStyle:{color:"#f87171",width:1,type:"dotted"}},
+        {name:"\u8d85\u5356",type:"line",data:Array(c.length).fill(30),symbol:"none",lineStyle:{color:"#34d399",width:1,type:"dotted"}}
       ],
-      legend: { data: ['RSI6', 'RSI12', 'RSI24'], top: 0, left: 'center', textStyle: { fontSize: 10 } },
-      dataZoom: [{ type: 'inside', start: 0, end: 100 }, { type: 'slider', start: 0, end: 100, height: 12, bottom: 0 }]
-    }, true);
-  } else if (chartType === 'timeline') {
-    // 分时图：异步获取数据，显示在图表中
-    if (!cached.length) return;
-    const code = document.getElementById('ovCode')?.textContent || '';
-    if (!code) return;
-    API.timeline(code).then(res => {
-      const d = res.data;
-      if (!d || !d.lines) return;
-      const times = d.lines.map(x => x.time);
-      const prices = d.lines.map(x => x.price);
-      const vols = d.lines.map(x => x.volume);
-      const avg = d.prevClose || prices[0];
-      const colors = prices.map(p => p >= avg ? '#e74c3c' : '#27ae60');
-      myChart.setOption({
-        tooltip: { trigger: 'axis', axisPointer: { type: 'cross', label: { backgroundColor: '#1a1e30', color: '#e2e8f0', borderColor: 'rgba(56,189,248,.3)', borderWidth: 1 } }, backgroundColor: 'rgba(20,25,50,.9)', borderColor: 'rgba(56,189,248,.3)', borderWidth: 1, textStyle: { color: '#e2e8f0', fontSize: 11 } },
-        grid: [{ left: '6%', right: '6%', top: '6%', height: '60%' }, { left: '6%', right: '6%', top: '74%', height: '18%' }],
-        xAxis: [{ type: 'category', data: times, gridIndex: 0, axisLabel: { fontSize: 9, color: '#999', interval: 30 } }, { type: 'category', data: times, gridIndex: 1, axisLabel: { show: false } }],
-        yAxis: [{ type: 'value', gridIndex: 0, scale: true, splitLine: { lineStyle: { color: '#f0f0f0' } } }, { type: 'value', gridIndex: 1, splitLine: { show: false } }],
-        series: [
-          { name: '价格', type: 'line', xAxisIndex: 0, yAxisIndex: 0, data: prices, symbol: 'none', smooth: true, lineStyle: { width: 2, color: '#2196f3' }, areaStyle: { color: 'rgba(33,150,243,0.08)' } },
-          { name: '均价', type: 'line', xAxisIndex: 0, yAxisIndex: 0, data: Array(prices.length).fill(avg), symbol: 'none', lineStyle: { width: 1, color: '#ff9800', type: 'dashed' } },
-          { name: '成交量', type: 'bar', xAxisIndex: 1, yAxisIndex: 1, data: vols.map((v, i) => ({ value: v, itemStyle: { color: colors[i], opacity: .4 } })) }
+      legend:{data:["RSI6","RSI12","RSI24"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
+      dataZoom:[{type:"inside",start:0,end:100},{type:"slider",start:0,end:100}]
+    },true);
+  }else if(chartType==="timeline"){
+    if(!cached.length)return;
+    var code=document.getElementById("ovCode")?.textContent||"";
+    if(!code)return;
+    API.timeline(code).then(function(res){
+      var d2=res.data;if(!d2||!d2.lines)return;
+      var times=d2.lines.map(function(x){return x.time;}),prices=d2.lines.map(function(x){return x.price;}),vols=d2.lines.map(function(x){return x.volume;});
+      var avg=d2.prevClose||prices[0],cols=prices.map(function(p){return p>=avg?"#f87171":"#34d399";});
+      myChart.setOption({animation:true,animationDuration:800,animationEasing:"cubicOut",
+        tooltip:{trigger:"axis",axisPointer:{type:"cross",label:{backgroundColor:"#1a1e30",color:"#e2e8f0"}},backgroundColor:C0.bg,borderColor:C0.bd,borderWidth:1,textStyle:{color:C0.text,fontSize:12}},
+        grid:[{left:"5%",right:"5%",top:"9%",height:"56%"},{left:"5%",right:"5%",top:"73%",height:"19%"}],
+        xAxis:[{type:"category",data:times,gridIndex:0,axisLabel:{fontSize:10,color:C0.t2,interval:30},axisLine:{lineStyle:{color:C0.bd}}},{type:"category",data:times,gridIndex:1,axisLabel:{show:false}}],
+        yAxis:[{type:"value",gridIndex:0,scale:true,splitLine:{lineStyle:{color:C0.bd,opacity:.2,type:"dashed"}},axisLabel:{fontSize:11,color:C0.t2}},{type:"value",gridIndex:1,splitLine:{show:false},axisLabel:{fontSize:10,color:C0.t2}}],
+        series:[
+          {name:"\u4ef7\u683c",type:"line",xAxisIndex:0,yAxisIndex:0,data:prices,symbol:"none",smooth:true,lineStyle:{width:2.5,color:"#38bdf8"},areaStyle:{color:{type:"linear",x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:"rgba(56,189,248,.25)"},{offset:1,color:"rgba(56,189,248,.02)"}]}}},
+          {name:"\u5747\u4ef7",type:"line",xAxisIndex:0,yAxisIndex:0,data:Array(prices.length).fill(avg),symbol:"none",lineStyle:{width:1,color:"#fbbf24",type:"dashed",opacity:.7}},
+          {name:"\u6210\u4ea4\u91cf",type:"bar",xAxisIndex:1,yAxisIndex:1,data:vols.map(function(v,i){return{value:v,itemStyle:{color:cols[i],opacity:.4,borderRadius:[2,2,0,0]}};})}
         ],
-        legend: { data: ['价格', '均价'], top: 0, left: 'center', textStyle: { fontSize: 10 } },
-      }, true);
-    }).catch(() => {});
+        legend:{data:["\u4ef7\u683c","\u5747\u4ef7"],top:0,left:"center",textStyle:{fontSize:10,color:C0.t2}},
+        dataZoom:[{type:"inside",xAxisIndex:[0,1],start:0,end:100}]
+      },true);
+    });
   }
-}
-
-/* ===== UI 渲染 ===== */
-function showLoading(s) { document.getElementById('loading').classList.toggle('active', s); }
+  // apply slider
+  try{var oo=myChart.getOption();if(oo.dataZoom&&oo.dataZoom[1]){oo.dataZoom[1]=Object.assign({},sd,oo.dataZoom[1]);myChart.setOption(oo,true);}}catch(e){}
+}function showLoading(s) { document.getElementById('loading').classList.toggle('active', s); }
 function showError(msg) { const e = document.getElementById('errorBox'); e.textContent = msg || ''; e.classList.toggle('active', !!msg); }
 function fmtVol(v) { if (v >= 1e8) return (v / 1e8).toFixed(2) + '亿'; if (v >= 1e4) return (v / 1e4).toFixed(2) + '万'; return v.toFixed(0); }
 function fmtAmt(v) { if (v >= 1e12) return (v / 1e12).toFixed(2) + '万亿'; if (v >= 1e8) return (v / 1e8).toFixed(2) + '亿'; if (v >= 1e4) return (v / 1e4).toFixed(2) + '万'; return v.toFixed(0); }
 
+const TT = {
+  '\u6700\u9ad8':'\u5f53\u5929\u6700\u9ad8\u6210\u4ea4\u4ef7',
+  '\u6700\u4f4e':'\u5f53\u5929\u6700\u4f4e\u6210\u4ea4\u4ef7',
+  '\u5f00\u76d8':'\u5f53\u5929\u5f00\u76d8\u4ef7',
+  '\u6628\u6536':'\u6628\u5929\u6536\u76d8\u4ef7\uff08\u524d\u6536\u76d8\u4ef7\uff09',
+  '\u6210\u4ea4\u91cf':'\u5f53\u5929\u6210\u4ea4\u80a1\u7968\u6570\u91cf\uff08\u624b\uff091\u624b=100\u80a1',
+  '\u6210\u4ea4\u989d':'\u5f53\u5929\u6210\u4ea4\u603b\u91d1\u989d\uff08\u5143\uff09',
+  '\u6da8\u5e45':'=(\u5f53\u524d\u4ef7-\u6628\u6536\u4ef7)/\u6628\u6536\u4ef7x100%',
+  '\u6da8\u8dcc':'=\u5f53\u524d\u4ef7-\u6628\u6536\u4ef7',
+  '\u6362\u624b\u7387':'=\u6210\u4ea4\u91cf/\u6d41\u901a\u80a1\u672cx100%\uff0c\u53cd\u6620\u6d3b\u8dc3\u5ea6',
+  '\u5e02\u76c8\u7387':'=\u80a1\u4ef7/\u6bcf\u80a1\u6536\u76ca\uff0c\u8861\u91cf\u4f30\u503c\u9ad8\u4f4e',
+  '\u632f\u5e45':'=(\u6700\u9ad8-\u6700\u4f4e)/\u6628\u6536\u4ef7x100%\uff0c\u53cd\u6620\u4ef7\u683c\u6ce2\u52a8',
+  '\u603b\u5e02\u503c':'=\u80a1\u4ef7x\u603b\u80a1\u672c\uff0c\u516c\u53f8\u5e02\u573a\u603b\u4f30\u503c',
+  '\u6d41\u901a\u5e02\u503c':'=\u80a1\u4ef7x\u6d41\u901a\u80a1\u672c\uff0c\u53ef\u4e8c\u7ea7\u4ea4\u6613\u90e8\u5206',
+  'MA5':'5\u65e5\u6536\u76d8\u4ef7\u5e73\u5747\u503c\uff0c\u53cd\u6620\u77ed\u671f\u8d8b\u52bf\u3002\u80a1\u4ef7\u7ad9\u4e0aMA5\u77ed\u671f\u504f\u5f3a',
+  'MA10':'10\u65e5\u6536\u76d8\u4ef7\u5e73\u5747\u503c\uff0c\u914d\u5408MA5\u5224\u65ad\u91d1\u53c9/\u6b7b\u53c9',
+  'MA20':'20\u65e5\u6536\u76d8\u4ef7\u5e73\u5747\u503c\uff0c\u4e2d\u671f\u8d8b\u52bf',
+  'MA60':'60\u65e5\u6536\u76d8\u4ef7\u5e73\u5747\u503c\uff0c\u4e2d\u957f\u671f\u8d8b\u52bf',
+  'DIF':'\u5feb\u7ebf(12\u65e5)-\u6162\u7ebf(26\u65e5)\uff0c\u5dee\u503c\u8d8a\u5927\u591a\u5934\u52a8\u80fd\u8d8a\u5f3a',
+  'DEA':'DIF\u76849\u65e5\u5e73\u5747\u7ebf\uff0c\u4e0a\u7a7f=\u91d1\u53c9(\u770b\u591a)\uff0c\u4e0b\u7a7f=\u6b7b\u53c9(\u770b\u7a7a)',
+  'BAR':'\u67f1\u72b6\u7ebf=DIF-DEA\u3002\u7ea2\u67f1=\u591a\u5934\u52a8\u80fd\u589e\u5f3a\uff0c\u7eff\u67f1=\u7a7a\u5934\u52a8\u80fd\u589e\u5f3a',
+  'KDJ-K':'\u5feb\u901f\u53cd\u5e94\u7ebf\uff0cK<20\u8d85\u5356(\u53ef\u80fd\u53cd\u5f39)\uff0cK>80\u8d85\u4e70(\u53ef\u80fd\u56de\u8c03)',
+  'KDJ-D':'\u6162\u901f\u786e\u8ba4\u7ebf\uff0cK\u7a7f\u8d8aD=KDJ\u91d1\u53c9/\u6b7b\u53c9',
+  'KDJ-J':'\u6700\u654f\u611f\u7ebf\uff0c\u6781\u7aef\u503c\u610f\u5473\u7740\u53cd\u8f6c',
+  'RSI6':'6\u65e5\u76f8\u5bf9\u5f3a\u5f31\uff0c<30\u8d85\u5356(\u770b\u6da8)\uff0c>70\u8d85\u4e70(\u770b\u8dcc)',
+  'RSI14':'14\u65e5\u76f8\u5bf9\u5f3a\u5f31\u6307\u6807\uff0c\u901a\u5e38\u4e0eRSI6\u914d\u5408\u4f7f\u7528'
+};
 function renderOverview(quote) {
   const f = quote.data || {};
   document.getElementById('ovName').textContent = f.name || '--';
@@ -703,7 +699,7 @@ function renderOverview(quote) {
     ['换手率', f.turnover ? f.turnover+'%' : '--'], ['市盈率', f.pe ? f.pe : '--'],
     ['振幅', f.amplitude ? f.amplitude+'%' : '--'],
     ['总市值', f.totalMv ? f.totalMv+'亿' : '--'], ['流通市值', f.circMv ? f.circMv+'亿' : '--'],
-  ].map(d => `<div class="ov-meta-item"><div class="l">${d[0]}</div><div class="v">${d[1]}</div></div>`).join('');
+  ].map(d => `<div class="ov-meta-item" data-tip="${TT[d[0]]||d[0]}"><div class="l">${d[0]}</div><div class="v">${d[1]}</div></div>`).join('');
   document.getElementById('overview').classList.add('active');
 }
 
@@ -786,7 +782,7 @@ function renderIndicators(result) {
     else if (name === 'BAR') { sig = val > 0 ? 'bullish' : 'bearish'; lbl = val > 0 ? '红' : '绿'; }
     else if (name === 'KDJ-K') { sig = val > 80 ? 'bearish' : val < 20 ? 'bullish' : 'neutral'; lbl = val > 80 ? '超买' : val < 20 ? '超卖' : '--'; }
     else if (name === 'RSI6') { sig = val > 70 ? 'bearish' : val < 30 ? 'bullish' : 'neutral'; lbl = val > 70 ? '超买' : val < 30 ? '超卖' : '--'; }
-    return `<div class="ind-card"><div class="ind-name">${name}</div><div class="ind-val">${v}</div><span class="ind-signal ${sig}">${lbl}</span></div>`;
+    return `<div class="ind-card" data-tip="${TT[name]||name}"><div class="ind-name">${name}</div><div class="ind-val">${v}</div><span class="ind-signal ${sig}">${lbl}</span></div>`;
   }).join('');
   document.getElementById('indicators').classList.add('active');
 }
@@ -868,10 +864,9 @@ async function initSectors() {
 
       else loadSector(idx, sectors);
     });
-    // 默认第一个标签（自选）如果有收藏则显示自选，否则显示第一个板块
-    const w = getWatchlist();
-    if (w.length) { tabBar.children[0].classList.add('active'); loadWatchlist(); }
-    else { tabBar.children[1].classList.add('active'); loadSector(0, sectors); }
+    // 默认显示排行榜
+    tabBar.children[1].classList.add('active');
+    loadRanking();
     showLoading(false);
   } catch (e) { document.getElementById('stockList').innerHTML = '<div class="empty">板块加载失败</div>'; showLoading(false); }
 }
@@ -1129,7 +1124,28 @@ document.getElementById('guideBtn')?.addEventListener('click', () => {
 })();
 
 /* ===== 启动 ===== */
-document.addEventListener('DOMContentLoaded', () => {
+var tooltipEl = null;
+function initTooltip() {
+  if (!tooltipEl) { tooltipEl = document.createElement('div'); tooltipEl.className = 'tooltip-box'; document.body.appendChild(tooltipEl); }
+  document.addEventListener('mouseover', function(e) {
+    var target = e.target.closest('[data-tip]');
+    if (!target) { if (tooltipEl) tooltipEl.classList.remove('show'); return; }
+    tooltipEl.textContent = target.getAttribute('data-tip');
+    tooltipEl.classList.add('show');
+  });
+  document.addEventListener('mousemove', function(e) {
+    if (!tooltipEl || !tooltipEl.classList.contains('show')) return;
+    var x = e.clientX + 14, y = e.clientY + 14;
+    if (x + tooltipEl.offsetWidth > window.innerWidth - 10) x = e.clientX - tooltipEl.offsetWidth - 14;
+    if (y + tooltipEl.offsetHeight > window.innerHeight - 10) y = e.clientY - tooltipEl.offsetHeight - 14;
+    tooltipEl.style.left = x + 'px'; tooltipEl.style.top = y + 'px';
+  });
+  document.addEventListener('mouseout', function(e) {
+    if (e.target.closest('[data-tip]') && tooltipEl) tooltipEl.classList.remove('show');
+  });
+}
+document.addEventListener('DOMContentLoaded', function() {
+  initTooltip();
   loadNews();
   initSectors();
 });
